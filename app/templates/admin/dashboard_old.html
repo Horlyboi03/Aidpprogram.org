@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — AIDP{% endblock %}
+
+{% block content %}
+<div class="elite-admin-dashboard">
+  <!-- Main Content (No Sidebar) -->
+  <main class="admin-main-elite" style="margin-left: 0; width: 100%;">
+    <!-- Top Header -->
+    <header class="admin-header-elite">
+      <div class="header-top">
+        <h1 class="page-title">Grant Management Dashboard</h1>
+        <div class="admin-profile">
+          <div class="profile-avatar">{{ current_user.name[0] }}</div>
+          <div class="profile-info">
+            <div class="profile-name">{{ current_user.name }}</div>
+            <div class="profile-role">Administrator</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Quick Navigation -->
+    <div style="padding: 20px 32px; display: flex; gap: 12px;">
+      <a href="{{ url_for('admin.dashboard') }}" class="nav-link" style="padding: 10px 20px; background: rgba(79, 142, 247, 0.1); border-radius: 8px; color: #4f8ef7; text-decoration: none;">📊 Dashboard</a>
+      <a href="{{ url_for('admin.applications') }}" class="nav-link" style="padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; color: #94a3b8; text-decoration: none;">📋 Applications</a>
+      <a href="{{ url_for('admin.users') }}" class="nav-link" style="padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; color: #94a3b8; text-decoration: none;">👥 Users</a>
+      <a href="{{ url_for('admin.chat') }}" class="nav-link" style="padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; color: #94a3b8; text-decoration: none;">💬 Chat</a>
+      <a href="{{ url_for('auth.logout') }}" class="nav-link" style="padding: 10px 20px; background: rgba(239, 68, 68, 0.1); border-radius: 8px; color: #ef4444; text-decoration: none; margin-left: auto;">🚪 Logout</a>
+    </div>
+
+    <!-- Applications Section -->
+    <section class="applications-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Recent Applications</h2>
+          {% if status_filter != 'all' %}
+            <p class="filter-info">Filtered by: <strong>{{ status_filter | title }}</strong> <a href="{{ url_for('admin.dashboard') }}" class="filter-clear">Clear</a></p>
+          {% endif %}
+        </div>
+        <a href="{{ url_for('admin.applications') }}" class="btn-secondary">View All →</a>
+      </div>
+
+      {% if recent_apps %}
+      <div class="applications-scroll-container">
+        <div class="applications-cards-wrapper">
+          {% for app in recent_apps %}
+          <div class="application-card" onclick="viewApplication({{ app.id }})">
+            <div class="card-header">
+              <span class="card-id">{{ app.get_reference_id() }}</span>
+              <span class="status-badge status-{{ app.status }}">
+                {% if app.status == 'pending' %}
+                  ⏳ Pending
+                {% elif app.status == 'approved' %}
+                  ✓ Approved
+                {% else %}
+                  ✕ Rejected
+                {% endif %}
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="card-row">
+                <span class="card-label">Applicant</span>
+                <span class="card-value">{{ app.full_name }}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Email</span>
+                <span class="card-value card-email">{{ app.email }}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Grant Amount</span>
+                <span class="card-value card-amount">${{ "{:,.0f}".format(app.grant_amount) }}</span>
+              </div>
+              <div class="card-row">
+                <span class="card-label">Submitted</span>
+                <span class="card-value">{{ app.created_at.strftime('%b %d, %Y') }}</span>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="card-btn" onclick="event.stopPropagation(); viewApplication({{ app.id }})">View Details →</button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <p class="empty-title">No Applications</p>
+          <p class="empty-text">
+            {% if status_filter != 'all' %}
+              No applications with status "{{ status_filter }}"
+            {% else %}
+              Applications will appear here as they are submitted
+            {% endif %}
+          </p>
+        </div>
+      {% endif %}
+    </section>
+
+    <!-- Activity Panel -->
+    <section class="activity-section">
+      <h2 class="section-title">Recent Activity</h2>
+      <div class="activity-timeline">
+        {% if recent_apps %}
+          {% for app in recent_apps[:5] %}
+          <div class="activity-entry">
+            <div class="activity-marker"></div>
+            <div class="activity-body">
+              <p class="activity-message"><strong>{{ app.full_name }}</strong> submitted a grant application</p>
+              <span class="activity-timestamp">{{ app.created_at.strftime('%b %d, %Y at %I:%M %p') }}</span>
+            </div>
+            <span class="activity-badge status-{{ app.status }}">{{ app.status | title }}</span>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="activity-empty">No recent activity</div>
+        {% endif %}
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Detail Panel Modal -->
+<div class="detail-panel-overlay" id="detailPanelOverlay"></div>
+<div class="detail-panel-slide" id="detailPanel"></div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Global function for viewing applications
+window.viewApplication = function(appId) {
+  console.log('Viewing application:', appId);
+  fetch(`/admin/application/${appId}/panel`)
+    .then(response => response.text())
+    .then(html => {
+      const panel = document.getElementById('detailPanel');
+      const overlay = document.getElementById('detailPanelOverlay');
+      if (panel && overlay) {
+        panel.innerHTML = html;
+        panel.classList.add('open');
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    })
+    .catch(error => {
+      console.error('Error loading application details:', error);
+      alert('Failed to load application details');
+    });
+};
+
+// Global function for closing detail panel
+window.closeDetailPanel = function() {
+  const panel = document.getElementById('detailPanel');
+  const overlay = document.getElementById('detailPanelOverlay');
+  if (panel && overlay) {
+    panel.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = 'auto';
+  }
+};
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') window.closeDetailPanel();
+});
+
+const detailOverlay = document.getElementById('detailPanelOverlay');
+if (detailOverlay) {
+  detailOverlay.addEventListener('click', window.closeDetailPanel);
+}
+</script>
+{% endblock %}

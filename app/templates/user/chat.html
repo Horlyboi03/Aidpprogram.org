@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block title %}Chat with AIDP — Support{% endblock %}
+
+{% block extra_head %}
+<script src="{{ url_for('static', filename='js/socket.io.min.js') }}" defer></script>
+<style>
+  /* Force full screen chat on mobile */
+  @media (max-width: 768px) {
+    body {
+      overflow: hidden;
+    }
+    .navbar {
+      display: none !important;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block footer %}
+<!-- No footer on chat page -->
+{% endblock %}
+
+{% block content %}
+<div class="chat-page">
+  <div class="chat-layout">
+
+    <!-- ── Sidebar ── -->
+    <aside class="chat-sidebar">
+      <div class="chat-sidebar-header">
+        <div class="chat-admin-avatar">
+          <span>A</span>
+          <div class="online-dot online"></div>
+        </div>
+        <div class="chat-admin-info">
+          <div class="chat-admin-name">AIDP Support</div>
+          <div class="chat-admin-status online-status" id="adminStatus">
+            <span class="status-dot"></span>
+            Online
+          </div>
+        </div>
+      </div>
+      <div class="chat-sidebar-info">
+        <p>💬 Chat with our grant advisors for any questions about your application or funding process.</p>
+        <p>⏰ Response time: typically within a few minutes during business hours.</p>
+      </div>
+    </aside>
+
+    <!-- ── Chat Window ── -->
+    <div class="chat-window">
+      <div class="chat-topbar">
+        <div class="chat-topbar-left">
+          <a href="{{ url_for('user.dashboard') }}" class="chat-back-btn" title="Back to Dashboard">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </a>
+          <div class="chat-topbar-info">
+            <span class="chat-topbar-title">AIDP Support Team</span>
+            <span class="chat-topbar-sub">We're here to help</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        {% if not admin %}
+          <div class="chat-sys-msg">Support chat is currently unavailable. Please try again later.</div>
+        {% elif not messages %}
+          <div class="chat-sys-msg">Send us a message — we're happy to help! 👋</div>
+        {% else %}
+          {% for msg in messages %}
+            <div class="msg-row {{ 'msg-mine' if msg.sender_id == current_user.id else 'msg-theirs' }}" data-message-id="{{ msg.id }}">
+              <div class="msg-bubble">
+                {% if msg.sender_id != current_user.id %}
+                  <p class="msg-sender-name">AIDP Support</p>
+                {% endif %}
+                {% if msg.image_url %}
+                  <img src="{{ url_for('static', filename=msg.image_url) }}" alt="Shared image" class="msg-image" onclick="window.open('{{ url_for('static', filename=msg.image_url) }}', '_blank')" />
+                {% else %}
+                  <p class="msg-text">{{ msg.body }}</p>
+                {% endif %}
+                <div class="msg-footer">
+                  <span class="msg-time">{{ msg.timestamp.strftime('%I:%M %p') }}</span>
+                  {% if msg.sender_id == current_user.id %}
+                    {% if msg.is_read %}
+                      <span class="msg-status-indicator read" title="Read">
+                        <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <svg class="status-icon status-icon-second" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </span>
+                    {% elif msg.is_delivered %}
+                      <span class="msg-status-indicator delivered" title="Delivered">
+                        <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </span>
+                    {% else %}
+                      <span class="msg-status-indicator sending" title="Sending">
+                        <svg class="status-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                      </span>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {% if admin %}
+      <form class="chat-input-bar" id="chatForm" onsubmit="sendMessage(event)">
+        <div class="chat-input-wrapper">
+          <input type="file" id="imageInput" class="chat-image-input" accept="image/*" onchange="handleImageSelect(event)" />
+          <button type="button" class="chat-image-upload-btn" onclick="document.getElementById('imageInput').click()" title="Send image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+          <input type="text" id="msgInput" class="chat-input" placeholder="Type a message..." autocomplete="off" />
+        </div>
+        <button type="submit" class="chat-send-btn" id="sendBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </form>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/chat.js') }}?v=20260510000001"></script>
+<script>
+  // Wait for DOM and Socket.IO to be ready
+  document.addEventListener('DOMContentLoaded', function() {
+    const CURRENT_USER_ID = {{ current_user.id }};
+    const RECIPIENT_ID = {{ admin.id if admin else 'null' }};
+    
+    // Ensure Socket.IO is loaded before initializing
+    if (typeof io !== 'undefined') {
+      initChat(CURRENT_USER_ID, RECIPIENT_ID);
+    } else {
+      console.log('[AIDP Chat] Waiting for Socket.IO to load...');
+      let checkCount = 0;
+      const checkInterval = setInterval(function() {
+        checkCount++;
+        if (typeof io !== 'undefined') {
+          console.log('[AIDP Chat] Socket.IO loaded, initializing...');
+          clearInterval(checkInterval);
+          initChat(CURRENT_USER_ID, RECIPIENT_ID);
+        } else if (checkCount > 10) {
+          clearInterval(checkInterval);
+          console.error('[AIDP Chat] Socket.IO failed to load');
+          alert('Chat system failed to load. Please refresh the page.');
+        }
+      }, 300);
+    }
+  });
+</script>
+{% endblock %}

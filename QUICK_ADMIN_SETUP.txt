@@ -1,0 +1,79 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                    AIDP ADMIN CREDENTIALS QUICK SETUP                      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📧 ADMIN CREDENTIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Email:     admin@aidp.org
+Username:  admin@aidp.org
+Password:  Admin@1234
+Login URL: http://127.0.0.1:5000/auth/login
+
+🚀 TO SEND CREDENTIALS VIA EMAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Configure .env file with email settings:
+   
+   MAIL_SERVER=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USE_TLS=True
+   MAIL_USERNAME=your-email@gmail.com
+   MAIL_PASSWORD=your-app-password
+   ADMIN_EMAIL=admin@aidp.org
+   ADMIN_PASSWORD=Admin@1234
+
+2. Run the script:
+   
+   python send_admin_credentials.py
+
+3. Check email for 3 separate emails:
+   - Email 1: Login link
+   - Email 2: Username
+   - Email 3: Password
+
+✅ WHAT THE SCRIPT DOES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Sends login link in first email
+✓ Sends username in second email (separate for security)
+✓ Sends password in third email (separate for security)
+✓ Professional HTML formatted emails
+✓ Includes security recommendations
+✓ Provides next steps for admin
+
+🔒 SECURITY FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Credentials sent in separate emails
+✓ Professional security warnings
+✓ Recommendations to change password
+✓ Clear instructions for first login
+✓ Secure email templates
+
+📋 ADMIN PORTAL FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Dashboard with statistics
+✓ View all applications
+✓ Approve/Reject applications
+✓ Chat with applicants
+✓ User management
+✓ Application details view
+
+🆘 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: Emails not sending
+Solution: Check .env file email configuration
+
+Problem: Script not found
+Solution: Run from project root directory
+
+Problem: Import errors
+Solution: pip install -r requirements.txt
+
+📞 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+See ADMIN_CREDENTIALS_SETUP.md for detailed instructions

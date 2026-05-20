@@ -1,0 +1,148 @@
+<!-- Premium Application Details Panel -->
+<div class="premium-detail-container">
+  <!-- Header Section -->
+  <div class="premium-detail-header">
+    <div class="header-left">
+      <h2 class="application-id">Application #{{ application.get_reference_id() }}</h2>
+      <span class="status-badge-large status-{{ application.status }}">
+        {% if application.status == 'pending' %}
+          ⏳ Pending Review
+        {% elif application.status == 'approved' %}
+          ✓ Approved
+        {% else %}
+          ✕ Rejected
+        {% endif %}
+      </span>
+    </div>
+    <button class="detail-panel-close" onclick="closeDetailPanel()">✕</button>
+  </div>
+
+  <!-- Content Wrapper -->
+  <div class="premium-detail-content">
+    <!-- Personal Information Card -->
+    <div class="premium-detail-card">
+      <div class="card-header">
+        <h3 class="card-title">Personal Information</h3>
+      </div>
+      <div class="card-grid card-grid-2">
+        <div class="info-group">
+          <label class="info-label">Full Name</label>
+          <p class="info-value">{{ application.full_name }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Date of Birth</label>
+          <p class="info-value">{{ application.date_of_birth.strftime('%B %d, %Y') }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Email</label>
+          <p class="info-value">{{ application.email }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Marital Status</label>
+          <p class="info-value">{{ application.marital_status | title }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Phone</label>
+          <p class="info-value">{{ application.phone }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Address</label>
+          <p class="info-value">{{ application.address }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Information Card -->
+    <div class="premium-detail-card">
+      <div class="card-header">
+        <h3 class="card-title">Financial Information</h3>
+      </div>
+      <div class="card-grid card-grid-2">
+        <div class="info-group">
+          <label class="info-label">Occupation</label>
+          <p class="info-value">{{ application.occupation }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Monthly Income</label>
+          <p class="info-value">${{ "{:,.2f}".format(application.monthly_income) }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Payment Method</label>
+          <p class="info-value">{{ application.payment_type | title }}</p>
+        </div>
+        <div class="info-group">
+          <label class="info-label">Housing Status</label>
+          <p class="info-value">{{ application.housing_status | title }}</p>
+        </div>
+      </div>
+      <!-- Grant Amount Highlight -->
+      <div class="grant-highlight">
+        <div class="grant-label">Grant Requested</div>
+        <div class="grant-amount">${{ "{:,.0f}".format(application.grant_amount) }}</div>
+      </div>
+    </div>
+
+    <!-- Application Content Card -->
+    <div class="premium-detail-card">
+      <div class="card-header">
+        <h3 class="card-title">Application Content</h3>
+      </div>
+      <div class="content-block">
+        <h4 class="content-subtitle">Reason for Applying</h4>
+        <p class="content-text">{{ application.reason }}</p>
+      </div>
+      {% if application.supporting_details %}
+      <div class="content-block">
+        <h4 class="content-subtitle">Supporting Details</h4>
+        <p class="content-text">{{ application.supporting_details }}</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Submission Info Card -->
+    <div class="premium-detail-card submission-card">
+      <div class="submission-info">
+        <div class="submission-item">
+          <span class="submission-icon">📅</span>
+          <div>
+            <p class="submission-label">Submitted</p>
+            <p class="submission-value">{{ application.created_at.strftime('%b %d, %Y at %I:%M %p') }}</p>
+          </div>
+        </div>
+        {% if application.reviewed_at %}
+        <div class="submission-item">
+          <span class="submission-icon">✓</span>
+          <div>
+            <p class="submission-label">Reviewed</p>
+            <p class="submission-value">{{ application.reviewed_at.strftime('%b %d, %Y at %I:%M %p') }}</p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    {% if application.status == 'pending' %}
+    <div class="action-buttons-container">
+      <form method="POST" action="{{ url_for('admin.approve_application', app_id=application.id) }}" class="action-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button type="submit" class="btn-action btn-approve-large">
+          <span class="btn-icon">✓</span>
+          <span class="btn-text">Approve Application</span>
+        </button>
+      </form>
+      <form method="POST" action="{{ url_for('admin.reject_application', app_id=application.id) }}" class="action-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <button type="submit" class="btn-action btn-reject-large">
+          <span class="btn-icon">✕</span>
+          <span class="btn-text">Reject Application</span>
+        </button>
+      </form>
+    </div>
+    {% else %}
+    <div class="status-decided-banner">
+      <p class="decided-text">Decision recorded: <strong>{{ application.status | title }}</strong></p>
+    </div>
+    {% endif %}
+  </div>
+</div>

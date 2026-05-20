@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Login — AIDP{% endblock %}
+
+{% block footer %}
+<!-- Footer hidden on login page -->
+{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+  <div class="auth-left">
+    <div class="auth-left-content">
+      <div class="auth-brand">
+        <img src="{{ url_for('static', filename='images/aidp-logo.svg') }}" alt="AIDP Logo" class="auth-logo-img">
+        <span>AIDP</span>
+      </div>
+      <h2 class="auth-left-title">Welcome Back</h2>
+      <p class="auth-left-sub">Sign in to track your application, receive updates, and chat with our team.</p>
+      <ul class="auth-benefits">
+        <li>📊 Track application status in real-time</li>
+        <li>💬 Chat directly with our advisors</li>
+        <li>🔔 Instant notifications on decisions</li>
+        <li>🔒 Secure, encrypted connection</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <a href="{{ url_for('user.home') }}" class="auth-back-btn" title="Back to Home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </a>
+      </div>
+      <h1 class="auth-title">Sign In</h1>
+      <p class="auth-subtitle">Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+
+      <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+        <div class="form-group">
+          <label for="email" class="form-label white-label">Email Address</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label white-label">Password</label>
+          <div class="input-icon-wrap">
+            <input type="password" id="password" name="password" class="form-control" placeholder="Your password" required autocomplete="current-password" />
+            <button type="button" class="input-eye" onclick="togglePwd('password', this)">👁</button>
+          </div>
+        </div>
+
+        <div class="form-check-row">
+          <label class="form-check">
+            <input type="checkbox" name="remember" id="remember" />
+            <span>Remember me</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn-primary btn-full">Sign In →</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function togglePwd(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+</script>
+{% endblock %}

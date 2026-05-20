@@ -1,0 +1,48 @@
+SERVER CRASHED - RESTART REQUIRED
+==================================
+
+Your Flask server is not running. That's why you're getting ERR_CONNECTION_REFUSED.
+
+RESTART THE SERVER:
+-------------------
+
+1. Open your terminal/command prompt
+
+2. Navigate to your project folder:
+   cd "C:\Users\HP\Desktop\new ai"
+
+3. Run the server:
+   python run.py
+
+4. Wait for the message:
+   * Running on http://127.0.0.1:5001
+
+5. Then open your browser and go to:
+   http://127.0.0.1:5001
+
+COMMON REASONS FOR SERVER CRASH:
+---------------------------------
+- Syntax error in Python code
+- Import error
+- Database connection issue
+- Port already in use
+
+CHECK THE TERMINAL:
+-------------------
+Look at the terminal where you ran "python run.py"
+- If you see an error message, that's what caused the crash
+- Share the error message if you need help fixing it
+
+QUICK CHECK:
+------------
+If the server won't start, try:
+1. Check if port 5001 is already in use
+2. Check for Python syntax errors
+3. Check database connection
+4. Look at the error message in terminal
+
+Once the server is running, you should see:
+ * Running on http://127.0.0.1:5001
+ * Running on http://172.20.10.6:5001
+
+Then you can access the site again.

@@ -1,0 +1,61 @@
+CRITICAL: CLEAR YOUR BROWSER CACHE NOW
+========================================
+
+The error at line 762 means your browser is loading an OLD CACHED VERSION of the page.
+
+FOLLOW THESE STEPS EXACTLY:
+---------------------------
+
+1. CLOSE ALL BROWSER TABS for http://127.0.0.1:5001
+
+2. RESTART YOUR FLASK SERVER:
+   - Stop the server (Ctrl+C)
+   - Run: python run.py
+
+3. OPEN BROWSER IN INCOGNITO/PRIVATE MODE:
+   - Chrome: Ctrl + Shift + N
+   - Firefox: Ctrl + Shift + P
+   - Edge: Ctrl + Shift + N
+
+4. GO TO: http://127.0.0.1:5001/admin/chat
+
+5. CHECK CONSOLE (F12):
+   - Should see: [Swipe] Initialized for 22 conversations
+   - Should see: [AIDP Chat] DOM loaded, initializing...
+   - Should NOT see: TypeError at line 762
+
+IF STILL GETTING ERROR IN INCOGNITO MODE:
+-----------------------------------------
+
+Then the issue is in the actual file. In that case:
+
+1. Open DevTools (F12)
+2. Go to Sources tab
+3. Find "chat" in the file tree
+4. Look at line 762
+5. Tell me what code is on that line
+
+The current file only has 540 lines, so line 762 shouldn't exist.
+This confirms you're loading a cached version.
+
+ALTERNATIVE: CLEAR CACHE MANUALLY
+----------------------------------
+
+Chrome/Edge:
+1. Press F12 (DevTools)
+2. Right-click the refresh button
+3. Select "Empty Cache and Hard Reload"
+
+Firefox:
+1. Press Ctrl + Shift + Delete
+2. Select "Cached Web Content"
+3. Click "Clear Now"
+4. Close and reopen browser
+
+VERIFICATION:
+-------------
+After clearing cache, you should see version number in the URL:
+- socket.io.min.js?v=20260508215715
+- chat.js?v=20260508215715
+
+If you don't see these version numbers, cache is not cleared.

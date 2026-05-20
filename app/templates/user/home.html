@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% block title %}AIDP — Empowering Communities Through Grant Funding{% endblock %}
+
+{% block content %}
+<!-- ══════════════════════════════════════════
+     HERO SECTION
+════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="hero-shape hero-shape-1"></div>
+    <div class="hero-shape hero-shape-2"></div>
+    <div class="hero-shape hero-shape-3"></div>
+    <div class="hero-shape hero-shape-4"></div>
+    <div class="hero-shape hero-shape-5"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-orb hero-orb-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-logo">
+        <img src="{{ url_for('static', filename='images/aidp-logo.svg') }}" alt="AIDP Logo">
+      </div>
+      Agency for International Development Program
+    </div>
+    <h1 class="hero-title">
+      Funding the Future<br/>
+      <span class="hero-title-accent">You Deserve</span>
+    </h1>
+    <p class="hero-subtitle">
+      AIDP connects eligible applicants with grant funding between
+      <strong>$100,000 – $450,000</strong> to build sustainable
+      livelihoods, support families, and transform communities worldwide.
+    </p>
+    <div class="hero-actions">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('user.apply') }}" class="btn-primary btn-lg">Apply for Grant</a>
+        <a href="{{ url_for('user.dashboard') }}" class="btn-outline btn-lg">My Dashboard</a>
+      {% else %}
+        <a href="{{ url_for('auth.register') }}" class="btn-primary btn-lg hero-float-btn">Apply Now</a>
+        <a href="{{ url_for('auth.login') }}" class="btn-outline btn-lg hero-float-btn">Sign In</a>
+      {% endif %}
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-icon">💰</span>
+        <span class="stat-num">$450K</span>
+        <span class="stat-label">Max Grant</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-icon">🌍</span>
+        <span class="stat-num">150+</span>
+        <span class="stat-label">Countries</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-icon">⚡</span>
+        <span class="stat-num">24h</span>
+        <span class="stat-label">Fast Review</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow">↓</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ABOUT SECTION
+════════════════════════════════════════════ -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-content">
+      <p class="about-text">
+        AIDP is designed for members that are suffering from diseases, health issues, cancer, disabled, poor, widowed, widow, divorced, surgery, retired, married, single, young, old, semi retired, self employed and many other issues.
+      </p>
+      <p class="about-text">
+        The program, in conjunction with the Private Grant Foundation, will issue billions of dollars in grants to a variety of groups each year. Grants are awarded to individuals every day.
+      </p>
+      <div class="about-highlights">
+        <div class="highlight-item">
+          <img src="{{ url_for('static', filename='images/icon-money.svg') }}" alt="Money Icon" class="highlight-icon-img">
+          <h4 class="highlight-title">Grant Programs Are Not Loans</h4>
+          <p class="highlight-text">You decide how much you need, as long as the amount is legal and meets the requirements of foundations and government agencies. The money is yours and never needs to be repaid.</p>
+        </div>
+        <div class="highlight-item">
+          <img src="{{ url_for('static', filename='images/icon-check.svg') }}" alt="Check Icon" class="highlight-icon-img">
+          <h4 class="highlight-title">Tax-Free & Interest-Free</h4>
+          <p class="highlight-text">Grant money is not taxable and bears no interest. You keep 100% of what you receive.</p>
+        </div>
+        <div class="highlight-item">
+          <img src="{{ url_for('static', filename='images/icon-unlock.svg') }}" alt="Unlock Icon" class="highlight-icon-img">
+          <h4 class="highlight-title">No Credit Checks Required</h4>
+          <p class="highlight-text">Grant programs don't require a credit check, a security deposit, or a cosigner. You can apply even if you have bad credit.</p>
+        </div>
+        <div class="highlight-item">
+          <img src="{{ url_for('static', filename='images/icon-scale.svg') }}" alt="Scale Icon" class="highlight-icon-img">
+          <h4 class="highlight-title">Your Right as a Taxpayer</h4>
+          <p class="highlight-text">You, as a taxpayer, have the right to apply for this money. This program is designed to help pay medical bills, buy a home, be a seller, start a business, go to school, retire, and much more.</p>
+        </div>
+      </div>
+      <p class="about-text about-text-highlight">
+        The program is worldwide. Grants are awarded to individuals every day.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     HOW IT WORKS SECTION
+════════════════════════════════════════════ -->
+<section class="how-section" id="how-it-works">
+  <div class="parallax-layer parallax-layer-1" id="parallax1"></div>
+  <div class="parallax-layer parallax-layer-2" id="parallax2"></div>
+  <div class="parallax-layer parallax-layer-3" id="parallax3"></div>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Process</span>
+      <h2 class="section-title">Simple. Transparent. Fast.</h2>
+      <p class="section-subtitle">Follow our streamlined process and receive your grant faster than ever before.</p>
+    </div>
+    <div class="process-timeline">
+      <!-- Step 1 -->
+      <div class="process-step">
+        <div class="step-marker">
+          <div class="step-number">01</div>
+          <div class="step-icon">📝</div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">Register & Login</h3>
+          <p class="step-description">Create your free account in under 2 minutes. No credit card required. Secure and encrypted.</p>
+        </div>
+        <div class="step-connector"></div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="process-step">
+        <div class="step-marker">
+          <div class="step-number">02</div>
+          <div class="step-icon">📋</div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">Fill Application</h3>
+          <p class="step-description">Complete the secure grant application form with your personal and financial details. Takes about 10-15 minutes.</p>
+        </div>
+        <div class="step-connector"></div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="process-step">
+        <div class="step-marker">
+          <div class="step-number">03</div>
+          <div class="step-icon">🔍</div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">Expert Review</h3>
+          <p class="step-description">Our team reviews your application as soon as possible. We may reach out via chat for clarifications.</p>
+        </div>
+        <div class="step-connector"></div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="process-step">
+        <div class="step-marker">
+          <div class="step-number">04</div>
+          <div class="step-icon">💰</div>
+        </div>
+        <div class="step-content">
+          <h3 class="step-title">Receive Grant</h3>
+          <p class="step-description">Upon approval, your grant is disbursed within 24-48 hours to your chosen payment method.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     DIRECTOR SECTION
+════════════════════════════════════════════ -->
+<section class="director-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Leadership</span>
+      <h2 class="section-title">Program Director</h2>
+      <p class="section-subtitle">Meet the dedicated leader overseeing AIDP's mission to transform lives globally.</p>
+    </div>
+    <div class="director-card">
+      <div class="director-image-wrap">
+        <img src="{{ url_for('static', filename='images/mary-george.jpg') }}" alt="Mary George" class="director-image" />
+      </div>
+      <div class="director-info">
+        <h3 class="director-name">Mary George</h3>
+        <p class="director-title">Executive Director, AIDP</p>
+        <p class="director-contact">
+          <span class="contact-email">📧 maryygeorge193@gmail.com</span>
+        </p>
+        <p class="director-bio">
+          With over 15 years of experience in international development and grant administration, Mary George leads the Agency for International Development Programs with a commitment to transparency, integrity, and empowering individuals worldwide. Her vision has helped thousands of applicants access life-changing grant funding.
+        </p>
+        <div class="director-stats">
+          <div class="director-stat">
+            <span class="stat-value">15+</span>
+            <span class="stat-label">Years Experience</span>
+          </div>
+          <div class="director-stat">
+            <span class="stat-value">50K+</span>
+            <span class="stat-label">Lives Impacted</span>
+          </div>
+          <div class="director-stat">
+            <span class="stat-value">$2B+</span>
+            <span class="stat-label">Grants Distributed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CTA SECTION
+════════════════════════════════════════════ -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card">
+      <div class="cta-orb"></div>
+      <h2 class="cta-title">Ready to Transform Your Future?</h2>
+      <p class="cta-subtitle">Join thousands who have already received life-changing funding through AIDP.</p>
+      <a href="{{ url_for('auth.register') }}" class="btn-primary btn-xl">Start Your Application Today</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+
+{% block extra_scripts %}
+<script>
+// Parallax effect for process section
+document.addEventListener('DOMContentLoaded', function() {
+  const parallaxLayers = document.querySelectorAll('.parallax-layer');
+  
+  window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    const howSection = document.getElementById('how-it-works');
+    
+    if (!howSection) return;
+    
+    const sectionTop = howSection.offsetTop;
+    const sectionHeight = howSection.offsetHeight;
+    const windowHeight = window.innerHeight;
+    
+    // Check if section is in viewport
+    if (scrollY + windowHeight > sectionTop && scrollY < sectionTop + sectionHeight) {
+      // Calculate parallax offset based on scroll position
+      const offset = (scrollY - sectionTop + windowHeight) * 0.5;
+      
+      parallaxLayers.forEach((layer, index) => {
+        const speed = 0.3 + (index * 0.15); // Different speed for each layer
+        const yOffset = offset * speed;
+        layer.style.transform = `translateY(${yOffset}px)`;
+      });
+    }
+  });
+});
+</script>
+{% endblock %}

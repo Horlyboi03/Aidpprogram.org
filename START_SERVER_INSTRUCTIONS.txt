@@ -1,0 +1,60 @@
+═══════════════════════════════════════════════════════════════
+🚀 HOW TO START YOUR SERVER - SIMPLE STEPS
+═══════════════════════════════════════════════════════════════
+
+YOU ARE ALREADY IN THE RIGHT DIRECTORY!
+Location: C:\Users\HP\Desktop\new ai ✓
+
+═══════════════════════════════════════════════════════════════
+STEP 1: START THE SERVER
+═══════════════════════════════════════════════════════════════
+
+In your PowerShell window, type this command and press Enter:
+
+    python run.py
+
+If that doesn't work, try:
+
+    python3 run.py
+
+Or:
+
+    py run.py
+
+═══════════════════════════════════════════════════════════════
+STEP 2: WAIT FOR SERVER TO START
+═══════════════════════════════════════════════════════════════
+
+You should see output like:
+ * Running on http://127.0.0.1:5001
+ * Running on http://0.0.0.0:5001
+
+This means the server is running! ✓
+
+═══════════════════════════════════════════════════════════════
+STEP 3: OPEN YOUR BROWSER
+═══════════════════════════════════════════════════════════════
+
+Go to: http://127.0.0.1:5001
+
+Or from another device on same network:
+- http://172.20.10.6:5001
+- http://10.85.36.100:5001
+
+═══════════════════════════════════════════════════════════════
+⚠️ IMPORTANT NOTES
+═══════════════════════════════════════════════════════════════
+
+1. DO NOT close the PowerShell window while using the website
+2. The server must keep running in the background
+3. To stop the server: Press Ctrl + C in PowerShell
+4. After CSS changes: Hard refresh with Ctrl + Shift + R
+
+═══════════════════════════════════════════════════════════════
+🔐 ADMIN LOGIN CREDENTIALS
+═══════════════════════════════════════════════════════════════
+
+Email: maryygeorge193@gmail.com
+Password: Horlyboi1607
+
+═══════════════════════════════════════════════════════════════

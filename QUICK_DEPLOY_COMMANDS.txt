@@ -1,0 +1,118 @@
+═══════════════════════════════════════════════════════════
+  AIDP DEPLOYMENT - QUICK COMMAND REFERENCE
+═══════════════════════════════════════════════════════════
+
+📍 STEP 1: PUSH TO GITHUB
+──────────────────────────────────────────────────────────
+cd "C:\Users\HP\Desktop\new ai"
+git init
+git add .
+git commit -m "Initial commit - AIDP ready for deployment"
+
+# Then create repo on GitHub and run:
+git remote add origin https://github.com/YOUR-USERNAME/aidp-grant-system.git
+git branch -M main
+git push -u origin main
+
+═══════════════════════════════════════════════════════════
+
+📍 STEP 2: SUPABASE DATABASE (FREE)
+──────────────────────────────────────────────────────────
+1. Go to: https://supabase.com
+2. Create new project: "aidp-database"
+3. Copy connection string (save it!)
+   Format: postgresql://postgres:[PASSWORD]@db.xxxxx.supabase.co:5432/postgres
+
+═══════════════════════════════════════════════════════════
+
+📍 STEP 3: RENDER DEPLOYMENT
+──────────────────────────────────────────────────────────
+1. Go to: https://render.com
+2. New Web Service → Connect GitHub repo
+3. Settings:
+   - Runtime: Python 3
+   - Build: pip install -r requirements.txt
+   - Start: gunicorn run:app
+   - Instance: Starter ($7/month recommended)
+
+4. Environment Variables (CRITICAL!):
+   ────────────────────────────────────────────────────────
+   SECRET_KEY = [generate at randomkeygen.com]
+   DATABASE_URL = [your Supabase connection string]
+   ADMIN_EMAIL = maryygeorge193@gmail.com
+   ADMIN_PASSWORD = Horlyboi1607
+   ADMIN_NAME = Mary George
+   MAIL_SERVER = smtp.gmail.com
+   MAIL_PORT = 587
+   MAIL_USE_TLS = True
+   MAIL_USERNAME = maryygeorge193@gmail.com
+   MAIL_PASSWORD = bbugpxegjppzyjja
+   MAIL_DEFAULT_SENDER = maryygeorge193@gmail.com
+   ────────────────────────────────────────────────────────
+
+5. Click "Create Web Service"
+
+═══════════════════════════════════════════════════════════
+
+📍 STEP 4: INITIALIZE DATABASE (In Render Shell)
+──────────────────────────────────────────────────────────
+python
+
+# Then run:
+from app import create_app, db
+app = create_app()
+with app.app_context():
+    db.create_all()
+    print("Database tables created!")
+exit()
+
+# Create admin user:
+python
+
+from app import create_app, db
+from app.models import User
+from werkzeug.security import generate_password_hash
+
+app = create_app()
+with app.app_context():
+    admin = User(
+        email='maryygeorge193@gmail.com',
+        name='Mary George',
+        password_hash=generate_password_hash('Horlyboi1607'),
+        role='admin'
+    )
+    db.session.add(admin)
+    db.session.commit()
+    print("Admin user created!")
+exit()
+
+═══════════════════════════════════════════════════════════
+
+📍 STEP 5: CONNECT DOMAIN
+──────────────────────────────────────────────────────────
+In Render:
+- Settings → Custom Domains → Add your domain
+
+In Domain Registrar (DNS Settings):
+- Type: A, Name: @, Value: [Render IP]
+- Type: CNAME, Name: www, Value: your-app.onrender.com
+
+Wait 30-60 minutes for DNS propagation
+
+═══════════════════════════════════════════════════════════
+
+✅ DONE! Your site is live at:
+   https://yourdomain.com
+   
+   Admin Login:
+   Email: maryygeorge193@gmail.com
+   Password: Horlyboi1607
+
+═══════════════════════════════════════════════════════════
+
+💰 COSTS:
+   - Supabase: FREE forever
+   - Render Free: FREE (sleeps after 15 min)
+   - Render Starter: $7/month (always on) ⭐ RECOMMENDED
+
+═══════════════════════════════════════════════════════════

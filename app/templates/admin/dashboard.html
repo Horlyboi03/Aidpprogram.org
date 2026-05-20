@@ -1,0 +1,441 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — AIDP{% endblock %}
+
+{% block content %}
+<!-- Premium SaaS Admin Dashboard -->
+<div class="admin-dashboard-premium">
+  
+  <!-- Animated Background -->
+  <div class="premium-bg">
+    <div class="bg-gradient-mesh"></div>
+    <div class="bg-glow-orb orb-1"></div>
+    <div class="bg-glow-orb orb-2"></div>
+    <div class="bg-glow-orb orb-3"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- Top Navbar Glass - REDESIGNED -->
+  <nav class="premium-topbar">
+    <div class="topbar-container">
+      <!-- LEFT: Page Title -->
+      <div class="topbar-left">
+        <div class="topbar-page-title">
+          <h1>Dashboard</h1>
+          <p>Grant Management Overview</p>
+        </div>
+      </div>
+      
+      <!-- CENTER: Search Bar (Desktop Only) -->
+      <div class="topbar-center">
+        <div class="search-bar-premium">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <input type="text" placeholder="Search applications, users..." />
+        </div>
+      </div>
+      
+      <!-- RIGHT: Icons + Profile + Hamburger -->
+      <div class="topbar-right">
+        <div class="notification-dropdown-container">
+          <button class="topbar-icon-btn" id="notificationBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            {% if admin_notifications.pending_applications > 0 or admin_notifications.unread_messages > 0 %}
+              <span class="notification-pulse"></span>
+            {% endif %}
+          </button>
+          
+          <!-- Notification Dropdown Panel -->
+          <div class="notification-dropdown" id="notificationDropdown">
+            <div class="notification-dropdown-header">
+              <h3>Notifications</h3>
+              <span class="notification-count">{{ admin_notifications.pending_applications + admin_notifications.unread_messages }}</span>
+            </div>
+            <div class="notification-dropdown-body">
+              {% if admin_notifications.pending_applications > 0 %}
+              <a href="{{ url_for('admin.applications') }}" class="notification-item">
+                <div class="notification-icon pending">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                </div>
+                <div class="notification-content">
+                  <p class="notification-title">Pending Applications</p>
+                  <p class="notification-text">{{ admin_notifications.pending_applications }} application{{ 's' if admin_notifications.pending_applications != 1 }} awaiting review</p>
+                </div>
+              </a>
+              {% endif %}
+              
+              {% if admin_notifications.unread_messages > 0 %}
+              <a href="{{ url_for('admin.chat') }}" class="notification-item">
+                <div class="notification-icon messages">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="notification-content">
+                  <p class="notification-title">Unread Messages</p>
+                  <p class="notification-text">{{ admin_notifications.unread_messages }} new message{{ 's' if admin_notifications.unread_messages != 1 }} from applicants</p>
+                </div>
+              </a>
+              {% endif %}
+              
+              {% if admin_notifications.pending_applications == 0 and admin_notifications.unread_messages == 0 %}
+              <div class="notification-empty">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <p>No new notifications</p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        
+        <a href="/admin/chat" class="topbar-icon-btn" id="messageBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          {% if admin_notifications.unread_messages > 0 %}
+            <span class="notification-pulse"></span>
+          {% endif %}
+        </a>
+        
+        <div class="topbar-profile-premium">
+          <div class="profile-avatar-premium">{{ current_user.name[0] }}</div>
+          <div class="profile-details">
+            <span class="profile-name-premium">{{ current_user.name }}</span>
+            <span class="profile-role-premium">Administrator</span>
+          </div>
+          <a href="{{ url_for('auth.logout') }}" class="logout-icon-premium">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </a>
+        </div>
+        
+        <!-- Hamburger Menu (Mobile Only - RIGHT SIDE) -->
+        <button class="sidebar-toggle" id="premiumSidebarToggle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Premium Sidebar -->
+  <aside class="premium-sidebar" id="premiumSidebar">
+    <div class="sidebar-content">
+      <a href="/admin/dashboard" class="sidebar-link active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        <span>Dashboard</span>
+        <div class="link-glow"></div>
+      </a>
+      
+      <a href="/admin/applications?status=all" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <span>Applications</span>
+      </a>
+      
+      <a href="/admin/applications?status=pending" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span>Pending Reviews</span>
+        {% if admin_notifications.pending_applications > 0 %}
+          <span class="sidebar-badge-premium">{{ admin_notifications.pending_applications }}</span>
+        {% endif %}
+      </a>
+      
+      <a href="/admin/applications?status=approved" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span>Approved Grants</span>
+      </a>
+      
+      <a href="/admin/applications?status=rejected" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="15" y1="9" x2="9" y2="15"></line>
+          <line x1="9" y1="9" x2="15" y2="15"></line>
+        </svg>
+        <span>Rejected Grants</span>
+      </a>
+      
+      <a href="/admin/users" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span>Users</span>
+      </a>
+      
+      <a href="/admin/chat" class="sidebar-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>Messages</span>
+        {% if admin_notifications.unread_messages > 0 %}
+          <span class="sidebar-badge-premium">{{ admin_notifications.unread_messages }}</span>
+        {% endif %}
+      </a>
+      
+      <!-- Logout Link -->
+      <a href="{{ url_for('auth.logout') }}" class="sidebar-link sidebar-logout">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="premium-content">
+    
+    <!-- Hero Welcome Section -->
+    <div class="hero-premium">
+      <div class="hero-text">
+        <h1 class="hero-title">Welcome back, Administrator 👋</h1>
+        <p class="hero-subtitle">Monitor grant applications, approvals, funding analytics, and user activities in real time</p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn-premium btn-primary-premium">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          New Grant
+        </button>
+        <button class="btn-premium btn-secondary-premium">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Export Reports
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards - Horizontal Scroll on Mobile -->
+    <div class="stats-section-premium">
+      <div class="stats-scroll-container">
+        <a href="{{ url_for('admin.applications', status='all') }}" class="stat-card-premium">
+          <div class="stat-icon-premium stat-blue">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content-premium">
+            <span class="stat-label-premium">Total Applications</span>
+            <span class="stat-value-premium" data-target="{{ total_apps }}">0</span>
+            <span class="stat-trend-premium trend-up">↑ Active</span>
+          </div>
+          <div class="stat-glow"></div>
+        </a>
+
+        <a href="{{ url_for('admin.applications', status='pending') }}" class="stat-card-premium">
+          <div class="stat-icon-premium stat-amber">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content-premium">
+            <span class="stat-label-premium">Pending Reviews</span>
+            <span class="stat-value-premium" data-target="{{ pending }}">0</span>
+            <span class="stat-trend-premium trend-warning">⚠ Needs Action</span>
+          </div>
+          <div class="stat-glow"></div>
+        </a>
+
+        <a href="{{ url_for('admin.applications', status='approved') }}" class="stat-card-premium">
+          <div class="stat-icon-premium stat-green">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="stat-content-premium">
+            <span class="stat-label-premium">Approved Grants</span>
+            <span class="stat-value-premium" data-target="{{ approved }}">0</span>
+            <span class="stat-trend-premium trend-success">✓ Success</span>
+          </div>
+          <div class="stat-glow"></div>
+        </a>
+
+        <a href="{{ url_for('admin.users') }}" class="stat-card-premium">
+          <div class="stat-icon-premium stat-purple">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="stat-content-premium">
+            <span class="stat-label-premium">Total Users</span>
+            <span class="stat-value-premium" data-target="{{ total_users }}">0</span>
+            <span class="stat-trend-premium trend-neutral">👥 Members</span>
+          </div>
+          <div class="stat-glow"></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Applications Table Glass -->
+    <div class="table-glass-premium">
+      <div class="table-header-premium">
+        <h2>Recent Applications</h2>
+        <a href="/admin/applications" class="view-all-link-premium">View All →</a>
+      </div>
+
+      {% if recent_apps %}
+      <div class="table-wrapper-premium">
+        <table class="premium-table">
+          <thead>
+            <tr>
+              <th>Applicant</th>
+              <th>Grant ID</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for app in recent_apps %}
+            <tr class="table-row-premium">
+              <td>
+                <div class="applicant-cell-premium">
+                  <div class="applicant-avatar-premium">{{ app.full_name[0] }}</div>
+                  <div class="applicant-info-premium">
+                    <a href="/admin/application/{{ app.id }}" class="applicant-name-link-premium">
+                      <span class="applicant-name-premium">{{ app.full_name }}</span>
+                    </a>
+                    <span class="applicant-email-premium">{{ app.email }}</span>
+                  </div>
+                </div>
+              </td>
+              <td><span class="grant-id-premium">{{ app.get_reference_id() }}</span></td>
+              <td><span class="amount-premium">${{ "{:,.0f}".format(app.grant_amount) }}</span></td>
+              <td>
+                {% if app.status == 'pending' %}
+                  <span class="badge-premium badge-pending-premium">Pending</span>
+                {% elif app.status == 'approved' %}
+                  <span class="badge-premium badge-approved-premium">Approved</span>
+                {% else %}
+                  <span class="badge-premium badge-rejected-premium">Rejected</span>
+                {% endif %}
+              </td>
+              <td><span class="date-premium">{{ app.created_at.strftime('%b %d, %Y') }}</span></td>
+              <td>
+                <div class="actions-premium">
+                  <a href="/admin/application/{{ app.id }}" class="action-btn-premium action-view">View</a>
+                  {% if app.status == 'pending' %}
+                  <form method="POST" action="{{ url_for('admin.approve_application', app_id=app.id) }}" style="display:inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button type="submit" class="action-btn-premium action-approve">Approve</button>
+                  </form>
+                  <form method="POST" action="{{ url_for('admin.reject_application', app_id=app.id) }}" style="display:inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button type="submit" class="action-btn-premium action-reject">Reject</button>
+                  </form>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state-premium">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+        </svg>
+        <p>No applications yet</p>
+      </div>
+      {% endif %}
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Sidebar toggle
+document.getElementById('premiumSidebarToggle')?.addEventListener('click', function() {
+  document.getElementById('premiumSidebar').classList.toggle('sidebar-open');
+});
+
+// Animated counter
+document.querySelectorAll('.stat-value-premium').forEach(el => {
+  const target = parseInt(el.getAttribute('data-target'));
+  let current = 0;
+  const increment = target / 50;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      el.textContent = target;
+      clearInterval(timer);
+    } else {
+      el.textContent = Math.floor(current);
+    }
+  }, 20);
+});
+
+// Make notification and message buttons clickable
+document.getElementById('notificationBtn')?.addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dropdown = document.getElementById('notificationDropdown');
+  dropdown.classList.toggle('show');
+});
+
+// Close notification dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('notificationDropdown');
+  const notificationBtn = document.getElementById('notificationBtn');
+  
+  if (dropdown && !dropdown.contains(e.target) && !notificationBtn.contains(e.target)) {
+    dropdown.classList.remove('show');
+  }
+});
+
+document.getElementById('messageBtn')?.addEventListener('click', function(e) {
+  if (!e.target.closest('a')) {
+    e.preventDefault();
+    window.location.href = '/admin/chat';
+  }
+});
+</script>
+{% endblock %}

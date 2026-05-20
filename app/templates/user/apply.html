@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% block title %}Grant Application — AIDP{% endblock %}
+
+{% block content %}
+<div class="apply-page-compact">
+  <div class="apply-container-compact">
+    <!-- Back Button -->
+    <button type="button" class="apply-back-btn-compact" onclick="window.history.back();" title="Go Back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <div class="apply-header-compact">
+      <h1 class="apply-title-compact">Grant Application</h1>
+      <p class="apply-subtitle-compact">$100K – $450K USD</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('user.apply') }}" class="apply-form-compact" enctype="multipart/form-data" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+      <!-- Personal & Financial Info -->
+      <div class="form-section-compact">
+        <div class="form-grid-compact">
+          <div class="form-group-compact">
+            <label for="full_name" class="form-label-compact">Full Name *</label>
+            <input type="text" id="full_name" name="full_name" class="form-control-compact"
+              value="{{ form_data.get('full_name', current_user.name) }}" required />
+          </div>
+          <div class="form-group-compact">
+            <label for="email" class="form-label-compact">Email *</label>
+            <input type="email" id="email" name="email" class="form-control-compact"
+              value="{{ form_data.get('email', current_user.email) }}" required />
+          </div>
+          <div class="form-group-compact">
+            <label for="phone" class="form-label-compact">Phone *</label>
+            <input type="tel" id="phone" name="phone" class="form-control-compact"
+              value="{{ form_data.get('phone', '') }}" required />
+          </div>
+          <div class="form-group-compact">
+            <label for="date_of_birth" class="form-label-compact">Date of Birth *</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control-compact"
+              value="{{ form_data.get('date_of_birth', '') }}" required />
+          </div>
+          <div class="form-group-compact">
+            <label for="marital_status" class="form-label-compact">Marital Status *</label>
+            <select id="marital_status" name="marital_status" class="form-control-compact" required>
+              <option value="">Select</option>
+              {% for s in ['Single', 'Married', 'Divorced', 'Widowed', 'Separated'] %}
+                <option value="{{ s }}" {{ 'selected' if form_data.get('marital_status') == s }}>{{ s }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group-compact">
+            <label for="address" class="form-label-compact">Address *</label>
+            <input type="text" id="address" name="address" class="form-control-compact"
+              value="{{ form_data.get('address', '') }}" required />
+          </div>
+          <div class="form-group-compact">
+            <label for="occupation" class="form-label-compact">Occupation *</label>
+            <input type="text" id="occupation" name="occupation" class="form-control-compact"
+              value="{{ form_data.get('occupation', '') }}" required />
+          </div>
+          <div class="form-group-compact">
+            <label for="monthly_income" class="form-label-compact">Monthly Income (USD) *</label>
+            <input type="number" id="monthly_income" name="monthly_income" class="form-control-compact"
+              value="{{ form_data.get('monthly_income', '') }}" required min="0" step="0.01" />
+          </div>
+          <div class="form-group-compact">
+            <label for="grant_amount_requested" class="form-label-compact">Grant Amount *</label>
+            <select id="grant_amount_requested" name="grant_amount_requested" class="form-control-compact" required>
+              <option value="">Select</option>
+              <option value="100000" {{ 'selected' if form_data.get('grant_amount_requested') == '100000' }}>$100,000</option>
+              <option value="150000" {{ 'selected' if form_data.get('grant_amount_requested') == '150000' }}>$150,000</option>
+              <option value="200000" {{ 'selected' if form_data.get('grant_amount_requested') == '200000' }}>$200,000</option>
+              <option value="250000" {{ 'selected' if form_data.get('grant_amount_requested') == '250000' }}>$250,000</option>
+              <option value="300000" {{ 'selected' if form_data.get('grant_amount_requested') == '300000' }}>$300,000</option>
+              <option value="350000" {{ 'selected' if form_data.get('grant_amount_requested') == '350000' }}>$350,000</option>
+              <option value="400000" {{ 'selected' if form_data.get('grant_amount_requested') == '400000' }}>$400,000</option>
+              <option value="450000" {{ 'selected' if form_data.get('grant_amount_requested') == '450000' }}>$450,000</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Payment & Housing -->
+        <div class="form-row-compact">
+          <div class="form-group-compact">
+            <label class="form-label-compact">Payment Method *</label>
+            <div class="radio-group-compact">
+              <label class="radio-option-compact">
+                <input type="radio" name="payment_type" value="cash"
+                  {{ 'checked' if form_data.get('payment_type') == 'cash' }} required />
+                <span>💵 Cash</span>
+              </label>
+              <label class="radio-option-compact">
+                <input type="radio" name="payment_type" value="cheque"
+                  {{ 'checked' if form_data.get('payment_type') == 'cheque' }} />
+                <span>📝 Cheque</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group-compact">
+            <label class="form-label-compact">Housing Status *</label>
+            <div class="radio-group-compact">
+              <label class="radio-option-compact">
+                <input type="radio" name="housing_status" value="own"
+                  {{ 'checked' if form_data.get('housing_status') == 'own' }} required />
+                <span>🏠 Own</span>
+              </label>
+              <label class="radio-option-compact">
+                <input type="radio" name="housing_status" value="rent"
+                  {{ 'checked' if form_data.get('housing_status') == 'rent' }} />
+                <span>🔑 Rent</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grant Details -->
+      <div class="form-section-compact">
+        <label for="reason" class="form-label-compact">Why do you need this grant? *</label>
+        <textarea id="reason" name="reason" class="form-control-compact" rows="3" required
+          placeholder="Explain your needs and how you'll use the funds...">{{ form_data.get('reason', '') }}</textarea>
+
+        <label for="supporting_details" class="form-label-compact" style="margin-top: 12px;">Additional Details (Optional)</label>
+        <textarea id="supporting_details" name="supporting_details" class="form-control-compact" rows="2"
+          placeholder="Any additional information...">{{ form_data.get('supporting_details', '') }}</textarea>
+      </div>
+
+      <!-- ID Documents -->
+      <div class="form-section-compact">
+        <label class="form-label-compact">Upload ID Documents *</label>
+        <div class="file-upload-grid-compact">
+          <div class="file-upload-item-compact">
+            <input type="file" id="id_document_front" name="id_document" class="file-input" accept=".jpg,.jpeg,.png,.pdf" required />
+            <label for="id_document_front" class="file-upload-label-compact">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>ID Front</span>
+            </label>
+            <p class="file-name-display" id="fileNameFront"></p>
+          </div>
+          <div class="file-upload-item-compact">
+            <input type="file" id="id_document_back" name="id_document_back" class="file-input" accept=".jpg,.jpeg,.png,.pdf" required />
+            <label for="id_document_back" class="file-upload-label-compact">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <span>ID Back</span>
+            </label>
+            <p class="file-name-display" id="fileNameBack"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Processing Fee Notice -->
+      <div class="form-section-compact form-notice-compact">
+        <p><strong>⚠️ Processing Fee Required</strong></p>
+        <p>A processing fee is required before grant delivery. This fee is separate from your grant amount and will be requested after approval. Your full grant will be transferred within 24-48 hours of fee payment.</p>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Selected Amount: <strong id="selectedGrantAmount">$0</strong></p>
+      </div>
+
+      <!-- Declaration & Submit -->
+      <div class="form-section-compact">
+        <label class="form-check-compact">
+          <input type="checkbox" id="declaration" required />
+          <span>I declare all information is true and accurate. I accept the processing fee terms.</span>
+        </label>
+        <div class="apply-submit-row-compact">
+          <a href="{{ url_for('user.dashboard') }}" class="btn-outline-compact">Cancel</a>
+          <button type="submit" class="btn-primary-compact">Submit →</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  const grantAmountSelect = document.getElementById('grant_amount_requested');
+  const selectedGrantAmountDisplay = document.getElementById('selectedGrantAmount');
+  
+  function updateGrantAmountDisplay() {
+    const amount = grantAmountSelect.value;
+    if (amount) {
+      selectedGrantAmountDisplay.textContent = '$' + parseInt(amount).toLocaleString();
+    } else {
+      selectedGrantAmountDisplay.textContent = '$0';
+    }
+  }
+  
+  updateGrantAmountDisplay();
+  grantAmountSelect.addEventListener('change', updateGrantAmountDisplay);
+
+  // File upload handling - Front
+  const fileInputFront = document.getElementById('id_document_front');
+  const fileNameDisplayFront = document.getElementById('fileNameFront');
+  const fileUploadLabelFront = document.querySelector('label[for="id_document_front"]');
+
+  fileInputFront.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        fileInputFront.value = '';
+        fileNameDisplayFront.textContent = '';
+        return;
+      }
+      fileNameDisplayFront.textContent = `✓ ${file.name}`;
+      fileUploadLabelFront.style.opacity = '0.6';
+    }
+  });
+
+  // File upload handling - Back
+  const fileInputBack = document.getElementById('id_document_back');
+  const fileNameDisplayBack = document.getElementById('fileNameBack');
+  const fileUploadLabelBack = document.querySelector('label[for="id_document_back"]');
+
+  fileInputBack.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB');
+        fileInputBack.value = '';
+        fileNameDisplayBack.textContent = '';
+        return;
+      }
+      fileNameDisplayBack.textContent = `✓ ${file.name}`;
+      fileUploadLabelBack.style.opacity = '0.6';
+    }
+  });
+</script>
+{% endblock %}

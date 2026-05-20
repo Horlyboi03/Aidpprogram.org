@@ -1,0 +1,540 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard — AIDP{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <!-- Animated Background -->
+  <div class="dashboard-bg-animation">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="floating-lines"></div>
+    
+    <!-- Radial Glow Blobs -->
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+    <div class="glow-blob blob-3"></div>
+    
+    <!-- Subtle Particles -->
+    <div class="particles-container">
+      <div class="particle particle-1"></div>
+      <div class="particle particle-2"></div>
+      <div class="particle particle-3"></div>
+      <div class="particle particle-4"></div>
+      <div class="particle particle-5"></div>
+      <div class="particle particle-6"></div>
+      <div class="particle particle-7"></div>
+      <div class="particle particle-8"></div>
+      <div class="particle particle-9"></div>
+      <div class="particle particle-10"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- ── Elite Header Section ── -->
+    <div class="dashboard-header elite-header">
+      <div class="header-content">
+        <a href="{{ url_for('user.home') }}" class="dash-back-btn" title="Back to Home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </a>
+        <div class="header-logo-brand">
+          <img src="{{ url_for('static', filename='images/aidp-logo.svg') }}" alt="AIDP Logo" class="header-logo-img">
+          <span class="header-brand-text">AIDP</span>
+        </div>
+        <div class="header-greeting">
+          <h1 class="dashboard-title text-reveal">Welcome back, <span class="name-highlight">{{ current_user.name.split()[0] }}</span></h1>
+          <p class="dashboard-subtitle dynamic-subtitle" id="dynamicGreeting">Let's check your progress</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        {% if not application %}
+          <a href="{{ url_for('user.apply') }}" class="btn-primary btn-lg float-animation hover-glow">Apply for Grant →</a>
+        {% endif %}
+        <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+      </div>
+    </div>
+
+    {% if application %}
+    <!-- ── PREMIUM GRID LAYOUT ── -->
+    <div class="premium-dashboard-grid">
+      
+      <!-- ROW 1: HERO STATUS CARD -->
+      <div class="hero-status-card status-{{ application.status }}">
+        <div class="hero-status-glow"></div>
+        <div class="hero-status-content">
+          <div class="hero-status-left">
+            <div class="hero-app-id">🎯 Application #{{ application.get_reference_id() }}</div>
+            <h2 class="hero-status-title">Grant Request: <span class="hero-amount">${{ "{:,.0f}".format(application.grant_amount) }}</span></h2>
+          </div>
+          <div class="hero-status-right">
+            <div class="status-indicator status-{{ application.status }}">
+              <span class="status-dot"></span>
+              <span class="status-text">
+                {% if application.status == 'pending' %}
+                  🟡 Under Review
+                {% elif application.status == 'approved' %}
+                  🟢 Approved
+                {% else %}
+                  🔴 Rejected
+                {% endif %}
+              </span>
+            </div>
+            <p class="hero-status-message">
+              {% if application.status == 'pending' %}
+                Your application is currently being evaluated by our funding team.
+              {% elif application.status == 'approved' %}
+                Congratulations! Your application has been approved.
+              {% else %}
+                Your application did not meet current criteria.
+              {% endif %}
+            </p>
+            <p class="hero-status-timeline">
+              {% if application.status == 'approved' %}
+                Approved on: {{ application.reviewed_at.strftime('%B %d, %Y') }}
+              {% elif application.status != 'pending' %}
+                Reviewed on: {{ application.reviewed_at.strftime('%B %d, %Y') }}
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2: VISUAL TIMELINE -->
+      <div class="visual-timeline-section">
+        <h3 class="timeline-title">Application Journey</h3>
+        <div class="visual-timeline">
+          <div class="timeline-step completed">
+            <div class="timeline-circle">✓</div>
+            <div class="timeline-label">Submitted</div>
+            <div class="timeline-date">{{ application.created_at.strftime('%b %d') }}</div>
+          </div>
+
+          <div class="timeline-connector {{ 'completed' if application.status in ['approved', 'rejected'] else 'active' }}"></div>
+
+          <div class="timeline-step {{ 'active' if application.status == 'pending' else 'completed' if application.status in ['approved', 'rejected'] else '' }}">
+            <div class="timeline-circle">
+              {% if application.status == 'pending' %}
+                <span class="pulse-dot"></span>
+              {% else %}
+                ✓
+              {% endif %}
+            </div>
+            <div class="timeline-label">Under Review</div>
+            <div class="timeline-date">In Progress</div>
+          </div>
+
+          <div class="timeline-connector {{ 'completed' if application.status in ['approved', 'rejected'] else '' }}"></div>
+
+          <div class="timeline-step {{ 'completed' if application.status == 'approved' else 'rejected' if application.status == 'rejected' else '' }}">
+            <div class="timeline-circle">
+              {% if application.status == 'approved' %}
+                ✓
+              {% elif application.status == 'rejected' %}
+                ✕
+              {% else %}
+                ○
+              {% endif %}
+            </div>
+            <div class="timeline-label">{{ 'Approved' if application.status == 'approved' else 'Decision' }}</div>
+            <div class="timeline-date">{{ application.reviewed_at.strftime('%b %d') if application.reviewed_at else 'Pending' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3: INFORMATION CARDS GRID -->
+      <div class="info-cards-grid">
+        
+        <!-- Application Details Card -->
+        <div class="premium-card card-fade-in" style="animation-delay: 0.1s">
+          <div class="card-header collapsible-header" onclick="toggleApplicationDetails()">
+            <h3 class="card-title">📄 Application Details</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="card-content application-details-content" id="applicationDetailsContent">
+            <div class="info-row">
+              <span class="info-label">Application ID</span>
+              <span class="info-value">#{{ application.get_reference_id() }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Grant Amount</span>
+              <span class="info-value highlight">${{ "{:,.0f}".format(application.grant_amount) }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Submitted</span>
+              <span class="info-value">{{ application.created_at.strftime('%b %d, %Y') }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Status</span>
+              <span class="info-value status-badge status-{{ application.status }}">{{ application.status | title }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Info Card -->
+        <div class="premium-card card-fade-in" style="animation-delay: 0.2s">
+          <div class="card-header collapsible-header" onclick="toggleFinancialInfo()">
+            <h3 class="card-title">🧾 Financial Info</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="card-content financial-info-content" id="financialInfoContent">
+            <div class="info-row">
+              <span class="info-label">Occupation</span>
+              <span class="info-value">{{ application.occupation }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Monthly Income</span>
+              <span class="info-value">${{ "{:,.0f}".format(application.monthly_income) }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Payment Method</span>
+              <span class="info-value">{{ application.payment_type | title }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Housing Status</span>
+              <span class="info-value">{{ application.housing_status | title }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submission Content Card -->
+        <div class="premium-card card-fade-in" style="animation-delay: 0.3s">
+          <div class="card-header">
+            <h3 class="card-title">📝 Submission Content</h3>
+          </div>
+          <div class="card-content">
+            <div class="text-content">
+              <h4 class="content-heading">Reason for Applying</h4>
+              <p class="content-text">{{ application.reason }}</p>
+            </div>
+            {% if application.supporting_details %}
+            <div class="text-content">
+              <h4 class="content-heading">Supporting Details</h4>
+              <p class="content-text">{{ application.supporting_details }}</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Personal Info Card (Collapsible) -->
+        <div class="premium-card card-fade-in" style="animation-delay: 0.4s">
+          <div class="card-header collapsible-header" onclick="togglePersonalInfo()">
+            <h3 class="card-title">👤 Personal Information</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="card-content personal-info-content" id="personalInfoContent">
+            <div class="info-row">
+              <span class="info-label">Full Name</span>
+              <span class="info-value">{{ application.full_name }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ application.email }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Phone</span>
+              <span class="info-value">{{ application.phone }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Date of Birth</span>
+              <span class="info-value">{{ application.date_of_birth.strftime('%B %d, %Y') }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Marital Status</span>
+              <span class="info-value">{{ application.marital_status }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Address</span>
+              <span class="info-value">{{ application.address }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Panel -->
+        <div class="premium-card card-fade-in" style="animation-delay: 0.5s">
+          <div class="card-header collapsible-header" onclick="toggleActivity()">
+            <h3 class="card-title">🕒 Activity</h3>
+            <span class="collapse-icon">▼</span>
+          </div>
+          <div class="card-content activity-content activity-panel" id="activityContent">
+            <div class="activity-item">
+              <span class="activity-dot"></span>
+              <span class="activity-text">Application submitted</span>
+              <span class="activity-time">{{ application.created_at.strftime('%b %d') }}</span>
+            </div>
+            <div class="activity-item">
+              <span class="activity-dot active"></span>
+              <span class="activity-text">Review started</span>
+              <span class="activity-time">In progress</span>
+            </div>
+            {% if application.reviewed_at %}
+            <div class="activity-item">
+              <span class="activity-dot"></span>
+              <span class="activity-text">Decision made</span>
+              <span class="activity-time">{{ application.reviewed_at.strftime('%b %d') }}</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Chat Assistant Card -->
+        <div class="premium-card card-fade-in" style="animation-delay: 0.6s">
+          <div class="card-header">
+            <h3 class="card-title">💬 Need Help?</h3>
+          </div>
+          <div class="card-content chat-card-content">
+            <p class="chat-message">Our advisors are ready to help with any questions about your application.</p>
+            <a href="{{ url_for('user.chat') }}" class="btn-primary btn-full chat-btn chat-btn-with-icon">
+              {% if user_notifications.unread_messages > 0 %}
+                <svg class="chat-unread-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  <circle cx="12" cy="11" r="1" fill="white"></circle>
+                  <circle cx="8" cy="11" r="1" fill="white"></circle>
+                  <circle cx="16" cy="11" r="1" fill="white"></circle>
+                </svg>
+              {% endif %}
+              <span>Chat with Admin →</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {% else %}
+    <!-- ── Opportunity Cards Section ── -->
+    <div class="opportunity-section">
+      <h2 class="section-title text-reveal">Ready to Transform Your Future?</h2>
+      <p class="section-subtitle">Join thousands of successful applicants</p>
+
+      <div class="opportunity-cards">
+        <!-- Card 1: Quick Apply -->
+        <div class="opportunity-card card-1 hover-lift">
+          <div class="card-glow"></div>
+          <div class="card-header-with-icon">
+            <div class="card-icon floating-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path>
+                <path d="M8 12h8M12 8v8"></path>
+              </svg>
+            </div>
+            <h3 class="card-title">Start Your Journey</h3>
+          </div>
+          <p class="card-description">Begin your grant application in just 5 minutes. Simple, secure, and straightforward.</p>
+          <div class="card-features">
+            <span class="feature-tag">⚡ Quick</span>
+            <span class="feature-tag">🔒 Secure</span>
+            <span class="feature-tag">✓ Easy</span>
+          </div>
+          <a href="{{ url_for('user.apply') }}" class="btn-primary btn-full pulse-effect">Start Application →</a>
+        </div>
+
+        <!-- Card 2: Why Apply -->
+        <div class="opportunity-card card-2 hover-lift">
+          <div class="card-glow"></div>
+          <div class="card-header-with-icon">
+            <div class="card-icon floating-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                <polyline points="13 2 13 9 20 9"></polyline>
+                <path d="M9 15l2 2 4-4"></path>
+              </svg>
+            </div>
+            <h3 class="card-title">Why Choose AIDP?</h3>
+          </div>
+          <p class="card-description">Unlock up to $450,000 in grants with zero credit checks, zero interest, and only a small processing fee upon approval.</p>
+          <div class="card-features">
+            <span class="feature-tag">💰 Up to $450K</span>
+            <span class="feature-tag">📊 90% Success</span>
+            <span class="feature-tag">🌍 Global</span>
+          </div>
+          <a href="{{ url_for('user.home') }}" class="btn-outline btn-full">Learn More</a>
+        </div>
+
+        <!-- Card 3: Support -->
+        <div class="opportunity-card card-3 hover-lift">
+          <div class="card-glow"></div>
+          <div class="card-header-with-icon">
+            <div class="card-icon floating-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <line x1="9" y1="10" x2="9" y2="10.01"></line>
+                <line x1="12" y1="10" x2="12" y2="10.01"></line>
+                <line x1="15" y1="10" x2="15" y2="10.01"></line>
+              </svg>
+            </div>
+            <h3 class="card-title">Get Support</h3>
+          </div>
+          <p class="card-description">Our dedicated team is here to help you every step of the way. Chat with us anytime.</p>
+          <div class="card-features">
+            <span class="feature-tag">💬 24/7 Chat</span>
+            <span class="feature-tag">👥 Expert Help</span>
+            <span class="feature-tag">⚡ Fast Response</span>
+          </div>
+          <a href="{{ url_for('user.chat') }}" class="btn-outline btn-full">Chat Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Social Proof Section ── -->
+    <div class="social-proof-section">
+      <h2 class="section-title text-reveal">Trusted by Thousands</h2>
+      <div class="proof-grid">
+        <div class="proof-card proof-card-1">
+          <div class="proof-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="proof-number">2,500+</div>
+          <div class="proof-text">Applicants Funded Globally</div>
+        </div>
+        <div class="proof-card proof-card-2">
+          <div class="proof-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="7"></circle>
+              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+            </svg>
+          </div>
+          <div class="proof-number">90%</div>
+          <div class="proof-text">Success Rate</div>
+        </div>
+        <div class="proof-card proof-card-3">
+          <div class="proof-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <div class="proof-number">150+</div>
+          <div class="proof-text">Countries Served</div>
+        </div>
+        <div class="proof-card proof-card-4">
+          <div class="proof-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <div class="proof-number">9.9/10</div>
+          <div class="proof-text">Average Rating</div>
+        </div>
+      </div>
+      <p class="proof-subtitle">Trusted by founders, students, innovators, and entrepreneurs worldwide</p>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% block extra_scripts %}
+<script>
+  // Dynamic greeting based on time of day
+  function updateDynamicGreeting() {
+    const hour = new Date().getHours();
+    const greetingEl = document.getElementById('dynamicGreeting');
+    if (!greetingEl) return;
+
+    let greeting = '';
+    if (hour < 12) {
+      greeting = '☀️ Good morning! Let\'s make progress today';
+    } else if (hour < 18) {
+      greeting = '🌤️ Good afternoon! Keep pushing forward';
+    } else {
+      greeting = '🌙 Good evening! Check your application status';
+    }
+    greetingEl.textContent = greeting;
+  }
+
+  updateDynamicGreeting();
+  setInterval(updateDynamicGreeting, 60000); // Update every minute
+
+  // Toggle Personal Information
+  function togglePersonalInfo() {
+    const content = document.getElementById('personalInfoContent');
+    const header = document.querySelector('.collapsible-header');
+    
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      header.classList.remove('expanded');
+    } else {
+      content.classList.add('expanded');
+      header.classList.add('expanded');
+    }
+  }
+
+  // Toggle Application Details
+  function toggleApplicationDetails() {
+    const content = document.getElementById('applicationDetailsContent');
+    const headers = document.querySelectorAll('.collapsible-header');
+    const header = headers[0]; // First collapsible header
+    
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      header.classList.remove('expanded');
+    } else {
+      content.classList.add('expanded');
+      header.classList.add('expanded');
+    }
+  }
+
+  // Toggle Financial Info
+  function toggleFinancialInfo() {
+    const content = document.getElementById('financialInfoContent');
+    const headers = document.querySelectorAll('.collapsible-header');
+    const header = headers[1]; // Second collapsible header
+    
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      header.classList.remove('expanded');
+    } else {
+      content.classList.add('expanded');
+      header.classList.add('expanded');
+    }
+  }
+
+  // Toggle Activity
+  function toggleActivity() {
+    const content = document.getElementById('activityContent');
+    const headers = document.querySelectorAll('.collapsible-header');
+    const header = headers[2]; // Third collapsible header
+    
+    if (content.classList.contains('expanded')) {
+      content.classList.remove('expanded');
+      header.classList.remove('expanded');
+    } else {
+      content.classList.add('expanded');
+      header.classList.add('expanded');
+    }
+  }
+</script>
+{% endblock %}
+
+{% block footer %}
+<!-- Social Media Footer -->
+<footer class="dashboard-footer">
+  <div class="dashboard-footer-content">
+    <p class="footer-text">Stay connected with AIDP for updates and announcements</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/agent__marygeorge?igsh=Mzduazh5dGpxeHg4" target="_blank" rel="noopener noreferrer" class="social-link instagram-link" title="Follow us on Instagram">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        <span>Instagram</span>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61573275546877" target="_blank" rel="noopener noreferrer" class="social-link facebook-link" title="Follow us on Facebook">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        <span>Facebook</span>
+      </a>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% endblock %}

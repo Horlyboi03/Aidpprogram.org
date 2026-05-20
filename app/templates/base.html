@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AIDP - Agency for International Development Program | Empowering communities through strategic grant funding." />
+  <title>{% block title %}AIDP — Agency for International Development Program{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260520a" />
+  
+  <!-- Premium Admin Dashboard -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260520a" />
+  
+  <!-- Comprehensive Responsive Fixes -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260520a" />
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="{{ 'admin-layout' if current_user.is_authenticated and current_user.is_admin() else '' }}">
+
+  <!-- ── Navigation ───────────────────────────────────── -->
+  {% if not (current_user.is_authenticated and current_user.is_admin()) %}
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="{{ url_for('user.home') }}" class="nav-brand">
+        <img src="{{ url_for('static', filename='images/aidp-logo.svg') }}" alt="AIDP Logo" class="brand-logo">
+        <span class="brand-text">AIDP</span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        {% if current_user.is_authenticated %}
+          {% if not current_user.is_admin() %}
+            <li><a href="{{ url_for('user.dashboard') }}" class="nav-link">Dashboard</a></li>
+            <li><a href="{{ url_for('user.apply') }}" class="nav-link">Apply</a></li>
+            <li><a href="{{ url_for('user.chat') }}" class="nav-link">Chat</a></li>
+          {% endif %}
+          <li>
+            <a href="{{ url_for('auth.logout') }}" class="nav-link btn-nav-logout">
+              Logout ({{ current_user.name.split()[0] }})
+            </a>
+          </li>
+        {% else %}
+          <li><a href="{{ url_for('user.home') }}" class="nav-link">Home</a></li>
+          <li><a href="{{ url_for('auth.login') }}" class="nav-link">Login</a></li>
+          <li><a href="{{ url_for('auth.register') }}" class="nav-link btn-nav-cta">Get Started</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  {% endif %}
+
+  <!-- ── Flash Messages ───────────────────────────────── -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" id="flashContainer">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            <span class="flash-icon">
+              {% if category == 'success' %}✅{% elif category == 'danger' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            </span>
+            <span class="flash-text">{{ message }}</span>
+            <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ── Main Content ─────────────────────────────────── -->
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ───────────────────────────────────────── -->
+  {% block footer %}
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand-wrap">
+        <img src="{{ url_for('static', filename='images/aidp-footer-logo.svg') }}" alt="AIDP Logo" class="footer-logo">
+        <span class="footer-brand">AIDP</span>
+      </div>
+      <p class="footer-copy">&copy; {{ now.year if now else '2025' }} Agency for International Development Program. All rights reserved.</p>
+      <p class="footer-tagline">Empowering communities. Changing lives.</p>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <!-- ── Scripts ──────────────────────────────────────── -->
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+    });
+    // Mobile toggle
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+    // Auto-dismiss flash after 5 s
+    setTimeout(() => {
+      document.querySelectorAll('.flash').forEach(el => el.style.opacity = '0');
+      setTimeout(() => {
+        const c = document.getElementById('flashContainer');
+        if (c) c.remove();
+      }, 600);
+    }, 5000);
+  </script>
+  
+  <!-- Logout Confirmation Modal -->
+  <script src="{{ url_for('static', filename='js/logout-confirm.js') }}?v=20260511"></script>
+  
+  <!-- Mobile Menu Toggle -->
+  <script src="{{ url_for('static', filename='js/mobile-menu.js') }}?v=20260511"></script>
+  
+  <!-- Admin Sidebar Toggle -->
+  <script src="{{ url_for('static', filename='js/sidebar-toggle.js') }}?v=20260511"></script>
+  
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

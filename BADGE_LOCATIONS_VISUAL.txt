@@ -1,0 +1,181 @@
+═══════════════════════════════════════════════════════════════════════════════
+  NOTIFICATION BADGE LOCATIONS - VISUAL GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+ADMIN INTERFACE
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ADMIN SIDEBAR (All Admin Pages)                                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  🌐 AIDP Admin                                                               │
+│                                                                              │
+│  📊 Dashboard                                                                │
+│                                                                              │
+│  📋 Applications  [3]  ← BADGE: Pending applications count                  │
+│                                                                              │
+│  👥 Users                                                                    │
+│                                                                              │
+│  💬 Chat  [5]  ← BADGE: Unread messages count                               │
+│                                                                              │
+│  🚪 Logout                                                                   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+BADGE APPEARS ON:
+  ✓ Admin Dashboard page
+  ✓ Admin Applications page
+  ✓ Admin Users page
+  ✓ Admin Chat page
+
+═══════════════════════════════════════════════════════════════════════════════
+
+APPLICANT INTERFACE
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  USER DASHBOARD                                                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  Welcome back, John                                                          │
+│  Let's check your progress                                                   │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  Application Status Card                                             │   │
+│  │  Grant Request: $250,000                                             │   │
+│  │  Status: Under Review                                                │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │  💬 Need Help?                                                       │   │
+│  │  Our advisors are ready to help with any questions.                 │   │
+│  │                                                                      │   │
+│  │  ┌──────────────────────────────────────────┐                       │   │
+│  │  │  Chat with Advisor →  [2]  ← BADGE       │                       │   │
+│  │  └──────────────────────────────────────────┘                       │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+BADGE APPEARS ON:
+  ✓ "Chat with Advisor" button on user dashboard
+
+═══════════════════════════════════════════════════════════════════════════════
+
+BADGE STYLING
+═══════════════════════════════════════════════════════════════════════════════
+
+Visual Appearance:
+  ┌────┐
+  │ 3  │  ← Red gradient background
+  └────┘     White text, bold
+             Rounded corners
+             Pulse animation
+             Box shadow
+
+Colors:
+  Background: Linear gradient (red #ef4444 → darker red #dc2626)
+  Text: White (#ffffff)
+  Shadow: Red glow (rgba(239, 68, 68, 0.4))
+
+Animation:
+  Pulses gently (scale 1.0 → 1.1 → 1.0)
+  2 second cycle, infinite loop
+
+═══════════════════════════════════════════════════════════════════════════════
+
+BADGE BEHAVIOR
+═══════════════════════════════════════════════════════════════════════════════
+
+ADMIN - APPLICATIONS BADGE:
+  Shows: Count of applications with status='pending'
+  Updates: When application is approved/rejected
+  Example: [3] means 3 pending applications
+
+ADMIN - CHAT BADGE:
+  Shows: Total unread messages from all applicants
+  Updates: When admin opens chat with applicant
+  Example: [5] means 5 unread messages from applicants
+
+APPLICANT - CHAT BUTTON BADGE:
+  Shows: Unread messages from admin
+  Updates: When applicant opens chat page
+  Example: [2] means 2 unread messages from admin
+
+═══════════════════════════════════════════════════════════════════════════════
+
+REAL-WORLD SCENARIOS
+═══════════════════════════════════════════════════════════════════════════════
+
+Scenario 1: New Application Submitted
+  1. Applicant submits application
+  2. Admin refreshes any page
+  3. Applications badge shows [1] (or increments)
+  4. Admin reviews and approves
+  5. Badge count decreases to [0] (badge disappears)
+
+Scenario 2: Applicant Sends Message
+  1. Applicant sends message to admin
+  2. Admin refreshes any page
+  3. Chat badge shows [1] (or increments)
+  4. Admin opens chat with that applicant
+  5. Badge count decreases
+
+Scenario 3: Admin Sends Message
+  1. Admin sends message to applicant
+  2. Applicant refreshes dashboard
+  3. "Chat with Advisor" button shows badge [1]
+  4. Applicant clicks chat button
+  5. Badge disappears
+
+Scenario 4: Multiple Unread Messages
+  1. Applicant A sends 2 messages
+  2. Applicant B sends 3 messages
+  3. Admin refreshes page
+  4. Chat badge shows [5] (total unread)
+  5. Admin opens chat with Applicant A
+  6. Badge updates to [3] (only B's messages remain)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+TECHNICAL DETAILS
+═══════════════════════════════════════════════════════════════════════════════
+
+Backend Context Processors:
+  • admin_notifications.unread_messages (int)
+  • admin_notifications.pending_applications (int)
+  • user_notifications.unread_messages (int)
+
+Template Usage:
+  {% if admin_notifications.unread_messages > 0 %}
+    <span class="notification-badge">{{ admin_notifications.unread_messages }}</span>
+  {% endif %}
+
+CSS Class:
+  .notification-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+
+═══════════════════════════════════════════════════════════════════════════════
+
+STATUS: ✅ FULLY IMPLEMENTED
+═══════════════════════════════════════════════════════════════════════════════
+
+All notification badges are live and ready for testing!
+
+Next step: Start the server and verify badges appear correctly.
+
+═══════════════════════════════════════════════════════════════════════════════
