@@ -27,11 +27,11 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     socketio.init_app(
         app, 
-        async_mode='threading',
+        async_mode='eventlet',
         cors_allowed_origins='*',
         manage_session=False,
-        logger=True,
-        engineio_logger=True
+        logger=False,
+        engineio_logger=False
     )
     csrf.init_app(app)
     mail.init_app(app)
