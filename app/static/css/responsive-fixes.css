@@ -1688,3 +1688,175 @@ body {
     backdrop-filter: blur(10px);
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   CRITICAL MOBILE FIXES - BACK BUTTONS & CHAT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── BACK BUTTON FIXES - Make visible and larger on mobile ────── */
+@media (max-width: 768px) {
+  /* All back buttons - larger and more visible */
+  .chat-back-btn,
+  .conversations-back-btn,
+  a[href*="dashboard"].chat-back-btn,
+  a[title*="Back"],
+  .application-header .chat-back-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    flex-shrink: 0 !important;
+    margin-right: 12px !important;
+    transition: all 0.2s ease !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  .chat-back-btn:hover,
+  .conversations-back-btn:hover,
+  .chat-back-btn:active,
+  .conversations-back-btn:active {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.05) !important;
+  }
+  
+  .chat-back-btn svg,
+  .conversations-back-btn svg,
+  a[href*="dashboard"].chat-back-btn svg,
+  a[title*="Back"] svg {
+    width: 28px !important;
+    height: 28px !important;
+    stroke-width: 2.5 !important;
+    color: #fff !important;
+  }
+  
+  /* Admin application details back button */
+  .application-header .chat-back-btn {
+    width: 44px !important;
+    height: 44px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  /* View application page back button */
+  .view-application-header .chat-back-btn {
+    width: 44px !important;
+    height: 44px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+}
+
+/* ── CHAT INPUT FIX - Prevent keyboard from hiding input ──────── */
+@media (max-width: 768px) {
+  /* Fix chat layout to prevent input from being hidden */
+  .chat-window {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile browsers */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px;
+    padding-bottom: 80px; /* Extra space for input bar */
+    min-height: 0;
+  }
+  
+  .chat-input-bar {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    flex-shrink: 0;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 100;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Ensure input stays visible when keyboard opens */
+  .chat-input-bar.keyboard-open {
+    position: fixed;
+    bottom: 0;
+  }
+  
+  /* Fix for iOS Safari */
+  @supports (-webkit-touch-callout: none) {
+    .chat-window {
+      height: -webkit-fill-available;
+    }
+    
+    .chat-input-bar {
+      padding-bottom: env(safe-area-inset-bottom, 12px);
+    }
+  }
+}
+
+/* ── CHAT CONNECTION STATUS - Show connection errors ──────────── */
+.chat-connection-error {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.chat-connection-success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* ── MOBILE VIEWPORT FIX - Prevent address bar issues ──────────── */
+@media (max-width: 768px) {
+  /* Use dynamic viewport units for better mobile support */
+  .chat-page,
+  .admin-page {
+    height: 100vh;
+    height: 100dvh;
+  }
+  
+  .chat-layout,
+  .admin-chat-layout {
+    height: 100vh;
+    height: 100dvh;
+  }
+  
+  /* Prevent body scroll when chat is open */
+  body:has(.chat-page),
+  body:has(.admin-chat-layout.conversation-active) {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}

@@ -31,7 +31,11 @@ def create_app(config_class=Config):
         cors_allowed_origins='*',
         manage_session=False,
         logger=False,
-        engineio_logger=False
+        engineio_logger=False,
+        ping_timeout=60,
+        ping_interval=25,
+        transports=['polling', 'websocket'],
+        allow_upgrades=True
     )
     csrf.init_app(app)
     mail.init_app(app)

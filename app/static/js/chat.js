@@ -44,19 +44,43 @@ function initChat(userId, targetId) {
   socket = io({ 
     transports: ['polling', 'websocket'],
     upgrade: true,
-    rememberUpgrade: true
+    rememberUpgrade: true,
+    reconnection: true,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    reconnectionAttempts: 5,
+    timeout: 20000
   });
 
   socket.on('connect', () => {
     console.log('[AIDP Chat] Connected:', socket.id);
+    hideConnectionError();
+    showConnectionSuccess();
   });
 
   socket.on('connect_error', (error) => {
     console.error('[AIDP Chat] Connection error:', error);
+    showConnectionError('Connection lost. Retrying...');
   });
 
   socket.on('disconnect', () => {
     console.log('[AIDP Chat] Disconnected');
+    showConnectionError('Disconnected. Reconnecting...');
+  });
+
+  socket.on('reconnect', (attemptNumber) => {
+    console.log('[AIDP Chat] Reconnected after', attemptNumber, 'attempts');
+    hideConnectionError();
+    showConnectionSuccess();
+  });
+
+  socket.on('reconnect_error', (error) => {
+    console.error('[AIDP Chat] Reconnection error:', error);
+  });
+
+  socket.on('reconnect_failed', () => {
+    console.error('[AIDP Chat] Reconnection failed');
+    showConnectionError('Connection failed. Please refresh the page.');
   });
 
   // Only set up message handlers if we have a recipient
@@ -452,4 +476,52 @@ function updateOnlineStatus(online) {
 function escapeHtml(str) {
   const map = { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#x27;' };
   return String(str).replace(/[&<>"']/g, c => map[c]);
+}
+
+
+/**
+ * Show connection error message
+ * @param {string} message - Error message to display
+ */
+function showConnectionError(message) {
+  // Remove any existing error messages
+  hideConnectionError();
+  
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'chat-connection-error';
+  errorDiv.id = 'chatConnectionError';
+  errorDiv.textContent = message || 'Connection lost. Please refresh and try again.';
+  
+  document.body.appendChild(errorDiv);
+}
+
+/**
+ * Hide connection error message
+ */
+function hideConnectionError() {
+  const errorDiv = document.getElementById('chatConnectionError');
+  if (errorDiv) {
+    errorDiv.style.animation = 'slideUp 0.3s ease-out';
+    setTimeout(() => {
+      errorDiv.remove();
+    }, 300);
+  }
+}
+
+/**
+ * Show connection success message
+ */
+function showConnectionSuccess() {
+  const successDiv = document.createElement('div');
+  successDiv.className = 'chat-connection-error chat-connection-success';
+  successDiv.textContent = 'Connected';
+  
+  document.body.appendChild(successDiv);
+  
+  setTimeout(() => {
+    successDiv.style.animation = 'slideUp 0.3s ease-out';
+    setTimeout(() => {
+      successDiv.remove();
+    }, 300);
+  }, 2000);
 }
