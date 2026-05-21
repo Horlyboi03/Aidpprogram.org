@@ -27,7 +27,7 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     socketio.init_app(
         app, 
-        async_mode='eventlet',
+        async_mode='threading',
         cors_allowed_origins='*',
         manage_session=False,
         logger=False,
