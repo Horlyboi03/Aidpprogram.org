@@ -42,6 +42,9 @@
       </div>
       
       <div class="topbar-right">
+        <!-- Notification Overlay for Mobile -->
+        <div class="notification-overlay" id="notificationOverlay"></div>
+        
         <div class="notification-dropdown-container">
           <button class="topbar-icon-btn" id="notificationBtn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -342,17 +345,35 @@ document.getElementById('notificationBtn')?.addEventListener('click', function(e
   e.preventDefault();
   e.stopPropagation();
   const dropdown = document.getElementById('notificationDropdown');
+  const overlay = document.getElementById('notificationOverlay');
+  
   dropdown.classList.toggle('show');
+  if (overlay) {
+    overlay.classList.toggle('show');
+  }
 });
 
-// Close notification dropdown when clicking outside
+// Close notification dropdown when clicking outside or on overlay
 document.addEventListener('click', function(e) {
   const dropdown = document.getElementById('notificationDropdown');
   const notificationBtn = document.getElementById('notificationBtn');
+  const overlay = document.getElementById('notificationOverlay');
   
   if (dropdown && !dropdown.contains(e.target) && !notificationBtn.contains(e.target)) {
     dropdown.classList.remove('show');
+    if (overlay) {
+      overlay.classList.remove('show');
+    }
   }
+});
+
+// Close on overlay click
+document.getElementById('notificationOverlay')?.addEventListener('click', function() {
+  const dropdown = document.getElementById('notificationDropdown');
+  const overlay = document.getElementById('notificationOverlay');
+  
+  dropdown.classList.remove('show');
+  overlay.classList.remove('show');
 });
 
 document.getElementById('messageBtn')?.addEventListener('click', function(e) {

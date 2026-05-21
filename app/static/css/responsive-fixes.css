@@ -1860,3 +1860,278 @@ body {
     width: 100%;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   APPLICATION DETAILS PAGE - MOBILE SCROLL FIX
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Fix application details page layout */
+  .admin-page {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .admin-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Application header - fixed at top */
+  .application-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-card);
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  
+  .application-header h1 {
+    font-size: 1rem;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Application content - scrollable */
+  .application-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px;
+  }
+  
+  /* Cards - full width on mobile */
+  .application-card,
+  .info-card,
+  .detail-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  /* Card headers - clickable and clear */
+  .card-header {
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(79, 142, 247, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  
+  .card-header h3 {
+    font-size: 0.95rem;
+    margin: 0;
+    flex: 1;
+  }
+  
+  .card-header svg {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+  
+  .card-header.expanded svg {
+    transform: rotate(180deg);
+  }
+  
+  /* Card content - smooth expand/collapse */
+  .card-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 16px;
+  }
+  
+  .card-content.expanded {
+    max-height: 2000px !important;
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Personal info content */
+  .personal-info-content.expanded {
+    max-height: 1500px !important;
+  }
+  
+  /* Application details content */
+  .application-details-content.expanded {
+    max-height: 1500px !important;
+  }
+  
+  /* Financial info content */
+  .financial-info-content.expanded {
+    max-height: 1500px !important;
+  }
+  
+  /* Activity content */
+  .activity-content.expanded {
+    max-height: 1500px !important;
+  }
+  
+  /* Info rows - stack on mobile */
+  .info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .info-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .info-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .info-value {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  /* Document images - responsive */
+  .document-images {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  
+  .document-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .document-image:active {
+    transform: scale(0.98);
+  }
+  
+  /* Action buttons - full width on mobile */
+  .application-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background: var(--bg-card);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    position: sticky;
+    bottom: 0;
+    z-index: 99;
+  }
+  
+  .application-actions .btn-primary,
+  .application-actions .btn-outline,
+  .application-actions .btn-danger {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+  
+  /* Status badge - larger on mobile */
+  .status-badge {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  
+  /* Timeline - horizontal scroll on mobile */
+  .activity-timeline {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 12px;
+  }
+  
+  .timeline-item {
+    min-width: 200px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  /* Prevent body scroll when viewing application */
+  body:has(.application-page) {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .application-header {
+    padding: 12px;
+  }
+  
+  .application-header h1 {
+    font-size: 0.9rem;
+  }
+  
+  .application-content {
+    padding: 12px;
+  }
+  
+  .card-header {
+    padding: 12px;
+  }
+  
+  .card-header h3 {
+    font-size: 0.85rem;
+  }
+  
+  .card-content.expanded {
+    padding: 12px;
+  }
+  
+  .info-label {
+    font-size: 0.7rem;
+  }
+  
+  .info-value {
+    font-size: 0.85rem;
+  }
+  
+  .application-actions {
+    padding: 12px;
+  }
+  
+  .application-actions .btn-primary,
+  .application-actions .btn-outline,
+  .application-actions .btn-danger {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+}

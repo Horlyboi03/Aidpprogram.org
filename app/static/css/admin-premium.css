@@ -1660,6 +1660,31 @@
   position: relative;
 }
 
+/* Mobile overlay for closing dropdown */
+.notification-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.notification-overlay.show {
+  display: block;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .notification-overlay.show {
+    display: block;
+  }
+}
+
 .notification-dropdown {
   position: absolute;
   top: calc(100% + 12px);
@@ -1851,8 +1876,13 @@
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .notification-dropdown {
-    width: 320px;
-    right: -10px;
+    position: fixed;
+    top: 60px !important;
+    right: 16px !important;
+    left: 16px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform-origin: top right;
   }
   
   .notification-dropdown::before {
@@ -1868,7 +1898,8 @@
   }
   
   .notification-dropdown-body {
-    max-height: 300px;
+    max-height: calc(100vh - 200px);
+    -webkit-overflow-scrolling: touch;
   }
   
   .notification-item {
@@ -1888,8 +1919,19 @@
 
 @media (max-width: 480px) {
   .notification-dropdown {
-    width: calc(100vw - 32px);
-    right: -60px;
+    position: fixed;
+    top: 60px !important;
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+  }
+  
+  .notification-dropdown-header {
+    padding: 14px 16px;
+  }
+  
+  .notification-dropdown-body {
+    max-height: calc(100vh - 180px);
   }
 }
 
