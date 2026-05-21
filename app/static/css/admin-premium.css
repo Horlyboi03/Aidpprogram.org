@@ -300,6 +300,17 @@
   transition: transform 0.3s ease;
 }
 
+@media (max-width: 768px) {
+  .premium-sidebar {
+    transform: translateX(-100%);
+    z-index: 9999; /* Above overlay on mobile */
+  }
+  
+  .premium-sidebar.sidebar-open {
+    transform: translateX(0);
+  }
+}
+
 .sidebar-content {
   display: flex;
   flex-direction: column;
@@ -1681,6 +1692,31 @@
 
 @media (max-width: 768px) {
   .notification-overlay.show {
+    display: block;
+  }
+}
+
+/* Sidebar overlay for mobile - allows closing sidebar by tapping outside */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 899;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.show {
+  display: block;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay.show {
     display: block;
   }
 }
