@@ -166,8 +166,10 @@
   cursor: pointer;
   color: #94A3B8;
   transition: all 0.3s ease;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 
 .sidebar-toggle:hover {
@@ -175,6 +177,10 @@
   border-color: var(--premium-blue);
   color: var(--premium-blue);
   box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+}
+
+.sidebar-toggle:active {
+  transform: scale(0.95);
 }
 
 /* CENTER: Search Bar (Desktop Only) */
@@ -1015,11 +1021,13 @@
 .back-btn-premium {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
-  border-radius: 12px;
+  border-radius: 50%; /* Circular */
   color: #94A3B8;
   text-decoration: none;
   font-size: 0.9rem;
@@ -1027,13 +1035,35 @@
   transition: all 0.3s ease;
   margin-bottom: 24px;
   backdrop-filter: blur(10px);
+  flex-shrink: 0;
 }
 
 .back-btn-premium:hover {
   background: rgba(37, 99, 235, 0.15);
   border-color: var(--premium-blue);
   color: var(--premium-blue);
-  transform: translateX(-4px);
+  transform: translateX(-4px) scale(1.05);
+}
+
+.back-btn-premium svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.5;
+}
+
+/* Mobile - Even larger */
+@media (max-width: 768px) {
+  .back-btn-premium {
+    width: 52px;
+    height: 52px;
+    border-width: 2px;
+  }
+  
+  .back-btn-premium svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 3;
+  }
 }
 
 /* Search & Filter Section */

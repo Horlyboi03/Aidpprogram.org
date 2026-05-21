@@ -10033,22 +10033,23 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(79, 142, 247, 0.1);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%; /* Circular */
+  background: rgba(79, 142, 247, 0.15);
   color: #4f8ef7;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  border: none;
+  border: 1px solid rgba(79, 142, 247, 0.3);
   padding: 0;
 }
 
 .back-arrow-btn:hover {
-  background: rgba(79, 142, 247, 0.2);
-  transform: translateX(-2px);
+  background: rgba(79, 142, 247, 0.25);
+  border-color: #4f8ef7;
+  transform: translateX(-2px) scale(1.05);
 }
 
 .back-arrow-btn:active {
@@ -10056,9 +10057,25 @@ html, body {
 }
 
 .back-arrow-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   stroke: currentColor;
+  stroke-width: 2.5;
+}
+
+/* Mobile - Even larger for better touch */
+@media (max-width: 768px) {
+  .back-arrow-btn {
+    width: 52px;
+    height: 52px;
+    border-width: 2px;
+  }
+  
+  .back-arrow-btn svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 3;
+  }
 }
 
 
