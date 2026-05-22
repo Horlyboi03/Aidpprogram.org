@@ -146,6 +146,9 @@
     console.log('[REGISTER SUCCESS] Page loaded');
     console.log('[REGISTER SUCCESS] Redirecting to login in 2 seconds');
     
+    // Make page visible immediately
+    document.body.style.opacity = '1';
+    
     // Redirect after 2 seconds
     setTimeout(function() {
       console.log('[REGISTER SUCCESS] Redirecting now...');
@@ -156,6 +159,14 @@
     document.getElementById('manualLink').addEventListener('click', function(e) {
       console.log('[REGISTER SUCCESS] Manual link clicked');
     });
+    
+    // Fallback: if redirect doesn't work after 5 seconds, try again
+    setTimeout(function() {
+      if (window.location.href.indexOf('register_success') !== -1) {
+        console.log('[REGISTER SUCCESS] Fallback redirect triggered');
+        window.location.replace('{{ login_url }}');
+      }
+    }, 5000);
   </script>
 </body>
 </html>
