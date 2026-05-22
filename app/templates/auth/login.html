@@ -1,6 +1,115 @@
 {% extends "base.html" %}
 {% block title %}Login — AIDP{% endblock %}
 
+{% block extra_head %}
+<!-- Critical CSS for immediate render on mobile -->
+<style>
+  /* Loading state to prevent white flash */
+  body { opacity: 0; transition: opacity 0.3s ease; }
+  body.loaded { opacity: 1; }
+  
+  /* Critical auth page styles - inline for immediate load */
+  .auth-page {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg-dark, #0b0f1a);
+  }
+  
+  .auth-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 50%, #1a202c 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 48px;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-dark, #0b0f1a);
+  }
+  
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+    position: relative;
+    z-index: 1;
+    background: var(--bg-card, #111827);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 40px 36px;
+  }
+  
+  .auth-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #f0f4ff;
+    margin-bottom: 8px;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: #f0f4ff;
+    font-size: 0.95rem;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 900px) {
+    .auth-left {
+      display: none;
+    }
+    
+    .auth-right {
+      padding: 60px 28px;
+      width: 100%;
+    }
+    
+    .auth-card {
+      padding: 32px 24px;
+      margin: 20px 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .auth-right {
+      padding: 40px 20px;
+    }
+    
+    .auth-card {
+      padding: 28px 20px;
+      max-width: 100%;
+    }
+    
+    .auth-title {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block footer %}
 <!-- Footer hidden on login page -->
 {% endblock %}
@@ -90,5 +199,19 @@ function togglePwd(id, btn) {
   inp.type = inp.type === 'password' ? 'text' : 'password';
   btn.textContent = inp.type === 'password' ? '👁' : '🙈';
 }
+
+// Ensure page is visible after load
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('loaded');
+  console.log('[LOGIN] Page loaded successfully');
+});
+
+// Fallback if DOMContentLoaded doesn't fire
+setTimeout(function() {
+  if (!document.body.classList.contains('loaded')) {
+    document.body.classList.add('loaded');
+    console.log('[LOGIN] Page loaded via fallback');
+  }
+}, 100);
 </script>
 {% endblock %}

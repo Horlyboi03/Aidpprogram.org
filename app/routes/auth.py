@@ -52,12 +52,16 @@ def register():
         # Try to send welcome email (but don't fail registration if it doesn't work)
         try:
             send_welcome_email(user.email, user.name)
-            flash('Registration successful! Please log in.', 'success')
         except Exception as e:
             print(f"[REGISTER] Email error: {str(e)}")
-            flash('Registration successful! Please log in.', 'success')
         
-        return redirect(url_for('auth.login'))
+        # Flash success message and redirect to login
+        flash('Account created successfully! Please sign in with your credentials.', 'success')
+        
+        # Use absolute URL for redirect to ensure it works on mobile
+        from flask import request as req
+        login_url = url_for('auth.login', _external=False)
+        return redirect(login_url)
 
     return render_template('auth/register.html')
 
