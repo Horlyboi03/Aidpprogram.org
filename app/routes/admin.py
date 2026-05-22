@@ -177,14 +177,23 @@ def approve_application(app_id):
     # Send approval email
     user = User.query.get(application.user_id)
     if user:
-        send_application_approved(
-            user_email=user.email,
-            user_name=user.name,
-            application_id=application.id,
-            grant_amount=application.grant_amount
-        )
+        try:
+            email_sent = send_application_approved(
+                user_email=user.email,
+                user_name=user.name,
+                application_id=application.get_reference_id(),
+                grant_amount=application.grant_amount
+            )
+            if email_sent:
+                flash(f'Application approved! Confirmation email sent to {user.email}.', 'success')
+            else:
+                flash(f'Application approved, but email failed to send to {user.email}.', 'warning')
+        except Exception as e:
+            print(f"[ADMIN] Email error on approval: {str(e)}")
+            flash(f'Application approved, but email error occurred.', 'warning')
+    else:
+        flash(f'Application #{app_id} has been approved.', 'success')
     
-    flash(f'Application #{app_id} has been approved and email sent to applicant.', 'success')
     return redirect(url_for('admin.applications'))
 
 
@@ -200,13 +209,22 @@ def reject_application(app_id):
     # Send rejection email
     user = User.query.get(application.user_id)
     if user:
-        send_application_rejected(
-            user_email=user.email,
-            user_name=user.name,
-            application_id=application.id
-        )
+        try:
+            email_sent = send_application_rejected(
+                user_email=user.email,
+                user_name=user.name,
+                application_id=application.get_reference_id()
+            )
+            if email_sent:
+                flash(f'Application rejected. Notification email sent to {user.email}.', 'warning')
+            else:
+                flash(f'Application rejected, but email failed to send to {user.email}.', 'warning')
+        except Exception as e:
+            print(f"[ADMIN] Email error on rejection: {str(e)}")
+            flash(f'Application rejected, but email error occurred.', 'warning')
+    else:
+        flash(f'Application #{app_id} has been rejected.', 'warning')
     
-    flash(f'Application #{app_id} has been rejected and email sent to applicant.', 'warning')
     return redirect(url_for('admin.applications'))
 
 

@@ -4,12 +4,12 @@
 {% block content %}
 <div class="apply-page-compact">
   <div class="apply-container-compact">
-    <!-- Back Button -->
-    <button type="button" class="apply-back-btn-compact" onclick="window.history.back();" title="Go Back">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Back Button - Arrow Icon Only -->
+    <a href="{{ url_for('user.dashboard') }}" class="apply-back-btn-compact" title="Back to Dashboard">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 12H5M12 19l-7-7 7-7"/>
       </svg>
-    </button>
+    </a>
 
     <div class="apply-header-compact">
       <h1 class="apply-title-compact">Grant Application</h1>

@@ -8,11 +8,13 @@ import os
 mail = Mail()
 
 # Email sending enabled/disabled flag
-EMAIL_ENABLED = os.environ.get('EMAIL_ENABLED', 'False').lower() == 'true'
+EMAIL_ENABLED = os.environ.get('EMAIL_ENABLED', 'false').lower() in ['true', '1', 'yes']
 
 
 def send_application_confirmation(user_email, user_name, application_id, grant_amount):
     """Send application confirmation email to applicant"""
+    print(f"[EMAIL] Attempting to send confirmation to {user_email}, EMAIL_ENABLED={EMAIL_ENABLED}")
+    
     if not EMAIL_ENABLED:
         print(f"[EMAIL DISABLED] Would send application confirmation to {user_email}")
         return True
@@ -79,6 +81,8 @@ def send_application_confirmation(user_email, user_name, application_id, grant_a
 
 def send_application_approved(user_email, user_name, application_id, grant_amount):
     """Send application approved email"""
+    print(f"[EMAIL] Attempting to send approval to {user_email}, EMAIL_ENABLED={EMAIL_ENABLED}")
+    
     if not EMAIL_ENABLED:
         print(f"[EMAIL DISABLED] Would send approval email to {user_email}")
         return True
@@ -140,6 +144,8 @@ def send_application_approved(user_email, user_name, application_id, grant_amoun
 
 def send_application_rejected(user_email, user_name, application_id):
     """Send application rejected email"""
+    print(f"[EMAIL] Attempting to send rejection to {user_email}, EMAIL_ENABLED={EMAIL_ENABLED}")
+    
     if not EMAIL_ENABLED:
         print(f"[EMAIL DISABLED] Would send rejection email to {user_email}")
         return True

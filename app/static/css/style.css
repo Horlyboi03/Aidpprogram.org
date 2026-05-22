@@ -11111,21 +11111,27 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(79, 142, 247, 0.1);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
   color: var(--accent);
-  border: 1px solid rgba(79, 142, 247, 0.2);
+  border: none;
   cursor: pointer;
   transition: all var(--transition);
   margin-bottom: 24px;
+  text-decoration: none;
 }
 
 .apply-back-btn-compact:hover {
-  background: rgba(79, 142, 247, 0.2);
-  border-color: rgba(79, 142, 247, 0.4);
-  transform: translateX(-3px);
+  background: rgba(79, 142, 247, 0.1);
+  transform: translateX(-3px) scale(1.1);
+}
+
+.apply-back-btn-compact svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 2.5;
 }
 
 .apply-header-compact {

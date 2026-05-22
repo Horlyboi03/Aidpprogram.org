@@ -171,14 +171,22 @@ def apply():
             db.session.commit()
             
             # Send confirmation email
-            send_application_confirmation(
-                user_email=current_user.email,
-                user_name=current_user.name,
-                application_id=app_obj.id,
-                grant_amount=grant_amount
-            )
+            try:
+                email_sent = send_application_confirmation(
+                    user_email=current_user.email,
+                    user_name=current_user.name,
+                    application_id=app_obj.get_reference_id(),
+                    grant_amount=grant_amount
+                )
+                if email_sent:
+                    print(f"[APPLICATION] Confirmation email sent successfully to {current_user.email}")
+                else:
+                    print(f"[APPLICATION] Warning: Confirmation email failed to send to {current_user.email}")
+            except Exception as email_error:
+                print(f"[APPLICATION] Email error: {str(email_error)}")
+                # Don't fail the application if email fails
             
-            flash('Application submitted successfully! A confirmation email has been sent to your email address.', 'success')
+            flash('Application submitted successfully! Check your email for confirmation.', 'success')
             return redirect(url_for('user.dashboard'))
 
         except (ValueError, Exception) as e:
