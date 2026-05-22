@@ -203,9 +203,21 @@ def send_application_rejected(user_email, user_name, application_id):
 
 def send_welcome_email(user_email, user_name):
     """Send welcome email to new registered users"""
+    print(f"[EMAIL] Attempting to send welcome to {user_email}, EMAIL_ENABLED={EMAIL_ENABLED}")
+    
     if not EMAIL_ENABLED:
         print(f"[EMAIL DISABLED] Would send welcome email to {user_email}")
         return True
+    
+    # Check if mail is configured
+    try:
+        from flask import current_app
+        if not current_app.config.get('MAIL_USERNAME'):
+            print(f"[EMAIL ERROR] MAIL_USERNAME not configured")
+            return False
+    except Exception as e:
+        print(f"[EMAIL ERROR] Configuration check failed: {str(e)}")
+        return False
         
     subject = "Welcome to AIDP - Your Journey to Financial Empowerment Starts Here!"
     
@@ -283,4 +295,6 @@ def send_welcome_email(user_email, user_name):
         return True
     except Exception as e:
         print(f"[EMAIL ERROR] Failed to send welcome email to {user_email}: {str(e)}")
+        print(f"[EMAIL ERROR] Error type: {type(e).__name__}")
+        print(f"[EMAIL ERROR] Check MAIL_PASSWORD in Render environment variables")
         return False
