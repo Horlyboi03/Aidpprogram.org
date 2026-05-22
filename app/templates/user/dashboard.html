@@ -619,29 +619,28 @@
   let logoClickTimer = null;
   
   document.addEventListener('DOMContentLoaded', function() {
-    const footerLogos = document.querySelectorAll('.dashboard-footer .footer-text, .header-logo-brand');
+    // Triple-click on header logo for logout (for logged-in users)
+    const headerLogos = document.querySelectorAll('.header-logo-brand');
     
-    footerLogos.forEach(function(logo) {
+    headerLogos.forEach(function(logo) {
       logo.addEventListener('click', function() {
         logoClickCount++;
         
         if (logoClickCount === 1) {
           logoClickTimer = setTimeout(function() {
             logoClickCount = 0;
-          }, 1000); // Reset after 1 second
+          }, 1000);
         }
         
         if (logoClickCount === 3) {
           clearTimeout(logoClickTimer);
           logoClickCount = 0;
           
-          // Show logout button
           const logoutBtn = document.getElementById('hiddenLogoutBtn');
           if (logoutBtn) {
             logoutBtn.style.display = 'inline-block';
             logoutBtn.style.animation = 'fadeIn 0.3s ease';
             
-            // Auto-hide after 5 seconds
             setTimeout(function() {
               logoutBtn.style.display = 'none';
             }, 5000);
@@ -649,6 +648,39 @@
         }
       });
     });
+    
+    // Triple-click on footer AIDP logo for Sign In (for non-logged-in users)
+    const footerLogo = document.getElementById('footerAidpLogo');
+    const signInLink = document.getElementById('hiddenSignInLink');
+    
+    if (footerLogo && signInLink) {
+      let footerClickCount = 0;
+      let footerClickTimer = null;
+      
+      footerLogo.addEventListener('click', function() {
+        footerClickCount++;
+        
+        if (footerClickCount === 1) {
+          footerClickTimer = setTimeout(function() {
+            footerClickCount = 0;
+          }, 1000);
+        }
+        
+        if (footerClickCount === 3) {
+          clearTimeout(footerClickTimer);
+          footerClickCount = 0;
+          
+          // Show Sign In link
+          signInLink.style.display = 'inline-block';
+          signInLink.style.animation = 'fadeIn 0.3s ease';
+          
+          // Auto-hide after 5 seconds
+          setTimeout(function() {
+            signInLink.style.display = 'none';
+          }, 5000);
+        }
+      });
+    }
   });
 
   // Dynamic greeting based on time of day
@@ -751,6 +783,12 @@
         <span>Facebook</span>
       </a>
     </div>
+    <!-- Hidden Sign In Link - Appears on triple-click -->
+    <div class="footer-aidp-logo" id="footerAidpLogo" style="margin-top: 20px; cursor: pointer; user-select: none;">
+      <img src="{{ url_for('static', filename='images/aidp-logo.svg') }}" alt="AIDP Logo" style="width: 32px; height: 32px; opacity: 0.5;">
+      <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.8rem; margin-left: 8px;">AIDP</span>
+    </div>
+    <a href="{{ url_for('auth.login') }}" id="hiddenSignInLink" style="display: none; margin-top: 12px; padding: 8px 20px; background: linear-gradient(135deg, #4f8ef7, #6366f1); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">Sign In</a>
   </div>
 </footer>
 {% endblock %}
