@@ -16,8 +16,24 @@ class Config:
     # Use psycopg (version 3) driver instead of psycopg2
     if database_url.startswith('postgresql://') and '+psycopg' not in database_url:
         database_url = database_url.replace('postgresql://', 'postgresql+psycopg://', 1)
+    
+    # Add SSL mode for Render PostgreSQL
+    if 'render.com' in database_url or 'DATABASE_URL' in os.environ:
+        if '?' in database_url:
+            database_url += '&sslmode=require'
+        else:
+            database_url += '?sslmode=require'
+    
     SQLALCHEMY_DATABASE_URI = database_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_pre_ping': True,
+        'pool_recycle': 300,
+        'connect_args': {
+            'sslmode': 'require',
+            'connect_timeout': 10
+        }
+    }
 
     # SocketIO
     SOCKETIO_ASYNC_MODE = 'threading'
