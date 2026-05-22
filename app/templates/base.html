@@ -12,13 +12,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
 
   <!-- Main stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260522001" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260522002" />
   
   <!-- Premium Admin Dashboard -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260522001" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260522002" />
   
   <!-- Comprehensive Responsive Fixes -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260522001" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260522002" />
   
   <!-- Force cache clear with timestamp -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -27,12 +27,14 @@
   
   <!-- Critical CSS for Mobile - Inline for immediate load -->
   <style>
-    /* CRITICAL: Mobile Back Buttons - Large Circles */
+    /* CRITICAL: Mobile Back Buttons - Large Circles - ALL VARIANTS */
     @media (max-width: 768px) {
       .back-arrow-btn,
       .back-btn-premium,
       .chat-back-btn,
-      .conversations-back-btn {
+      .conversations-back-btn,
+      .auth-back-btn,
+      .back-button-icon {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -48,15 +50,47 @@
         flex-shrink: 0 !important;
         cursor: pointer !important;
         transition: all 0.2s ease !important;
+        text-decoration: none !important;
+        position: relative !important;
+        z-index: 100 !important;
+        pointer-events: auto !important;
       }
       
       .back-arrow-btn svg,
       .back-btn-premium svg,
       .chat-back-btn svg,
-      .conversations-back-btn svg {
+      .conversations-back-btn svg,
+      .auth-back-btn svg,
+      .back-button-icon svg {
         width: 28px !important;
         height: 28px !important;
         stroke-width: 3 !important;
+        display: block !important;
+      }
+      
+      /* Application ID - Make visible on mobile */
+      .application-id,
+      .premium-detail-header h2 {
+        font-size: 1.1rem !important;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      
+      /* Document images - Make visible */
+      .document-image,
+      .document-image-clickable {
+        max-width: 100% !important;
+        height: auto !important;
+        display: block !important;
+        visibility: visible !important;
+        border-radius: 12px !important;
+      }
+      
+      .document-preview-container {
+        display: block !important;
+        visibility: visible !important;
+        margin-bottom: 20px !important;
       }
       
       /* Hamburger Menu - Visible and Clickable */
