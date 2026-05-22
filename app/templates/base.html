@@ -12,13 +12,101 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
 
   <!-- Main stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260521004" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260522001" />
   
   <!-- Premium Admin Dashboard -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260521004" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260522001" />
   
   <!-- Comprehensive Responsive Fixes -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260521004" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260522001" />
+  
+  <!-- Force cache clear with timestamp -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  
+  <!-- Critical CSS for Mobile - Inline for immediate load -->
+  <style>
+    /* CRITICAL: Mobile Back Buttons - Large Circles */
+    @media (max-width: 768px) {
+      .back-arrow-btn,
+      .back-btn-premium,
+      .chat-back-btn,
+      .conversations-back-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+        min-height: 52px !important;
+        border-radius: 50% !important;
+        background: rgba(79, 142, 247, 0.15) !important;
+        border: 2px solid rgba(79, 142, 247, 0.3) !important;
+        color: #4f8ef7 !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      .back-arrow-btn svg,
+      .back-btn-premium svg,
+      .chat-back-btn svg,
+      .conversations-back-btn svg {
+        width: 28px !important;
+        height: 28px !important;
+        stroke-width: 3 !important;
+      }
+      
+      /* Hamburger Menu - Visible and Clickable */
+      .sidebar-toggle,
+      #premiumSidebarToggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        padding: 10px !important;
+        cursor: pointer !important;
+        color: #94A3B8 !important;
+        z-index: 1001 !important;
+      }
+      
+      /* Sidebar Overlay */
+      .sidebar-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        background: rgba(0, 0, 0, 0.6) !important;
+        z-index: 899 !important;
+        display: none !important;
+        opacity: 0 !important;
+        transition: opacity 0.3s ease !important;
+      }
+      
+      .sidebar-overlay.show {
+        display: block !important;
+        opacity: 1 !important;
+      }
+      
+      /* Sidebar Mobile */
+      .premium-sidebar {
+        transform: translateX(-100%) !important;
+        z-index: 9999 !important;
+        transition: transform 0.3s ease !important;
+      }
+      
+      .premium-sidebar.sidebar-open {
+        transform: translateX(0) !important;
+      }
+    }
+  </style>
 
   {% block extra_head %}{% endblock %}
 </head>
@@ -122,7 +210,58 @@
   <script src="{{ url_for('static', filename='js/mobile-menu.js') }}?v=20260511"></script>
   
   <!-- Admin Sidebar Toggle -->
-  <script src="{{ url_for('static', filename='js/sidebar-toggle.js') }}?v=20260511"></script>
+  <script src="{{ url_for('static', filename='js/sidebar-toggle.js') }}?v=20260522001"></script>
+  
+  <!-- Inline Critical JavaScript for Immediate Load -->
+  <script>
+    // CRITICAL: Sidebar Toggle - Inline for immediate functionality
+    (function() {
+      document.addEventListener('DOMContentLoaded', function() {
+        const sidebarToggle = document.getElementById('premiumSidebarToggle');
+        const sidebar = document.getElementById('premiumSidebar');
+        
+        if (!sidebarToggle || !sidebar) return;
+        
+        // Create overlay
+        let overlay = document.getElementById('sidebarOverlay');
+        if (!overlay) {
+          overlay = document.createElement('div');
+          overlay.id = 'sidebarOverlay';
+          overlay.className = 'sidebar-overlay';
+          document.body.appendChild(overlay);
+        }
+        
+        // Toggle sidebar
+        sidebarToggle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('sidebar-open');
+            overlay.classList.toggle('show');
+          }
+        });
+        
+        // Close on overlay click
+        overlay.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('sidebar-open');
+            overlay.classList.remove('show');
+          }
+        });
+        
+        // Close on outside click
+        document.addEventListener('click', function(e) {
+          if (window.innerWidth <= 768) {
+            if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+              if (sidebar.classList.contains('sidebar-open')) {
+                sidebar.classList.remove('sidebar-open');
+                overlay.classList.remove('show');
+              }
+            }
+          }
+        });
+      });
+    })();
+  </script>
   
   {% block extra_scripts %}{% endblock %}
 </body>
