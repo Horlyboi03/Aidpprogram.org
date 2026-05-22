@@ -55,13 +55,12 @@ def register():
         except Exception as e:
             print(f"[REGISTER] Email error: {str(e)}")
         
-        # Flash success message and redirect to login
+        # Flash success message
         flash('Account created successfully! Please sign in with your credentials.', 'success')
         
-        # Use absolute URL for redirect to ensure it works on mobile
-        from flask import request as req
-        login_url = url_for('auth.login', _external=False)
-        return redirect(login_url)
+        # Render a redirect page instead of using Flask redirect
+        # This ensures the page loads properly on mobile
+        return render_template('auth/register_success.html', login_url=url_for('auth.login'))
 
     return render_template('auth/register.html')
 
