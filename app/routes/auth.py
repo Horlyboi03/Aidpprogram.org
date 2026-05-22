@@ -49,10 +49,14 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        # Send welcome email
-        send_welcome_email(user.email, user.name)
-
-        flash('Registration successful! A welcome email has been sent to your inbox. Please log in.', 'success')
+        # Try to send welcome email (but don't fail registration if it doesn't work)
+        try:
+            send_welcome_email(user.email, user.name)
+            flash('Registration successful! Please log in.', 'success')
+        except Exception as e:
+            print(f"[REGISTER] Email error: {str(e)}")
+            flash('Registration successful! Please log in.', 'success')
+        
         return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html')
