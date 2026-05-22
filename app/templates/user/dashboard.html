@@ -783,12 +783,12 @@
         <span>Facebook</span>
       </a>
     </div>
-    <!-- Hidden Sign In Link - Appears on triple-click -->
-    <div class="footer-aidp-logo" id="footerAidpLogo" style="margin-top: 20px; cursor: pointer; user-select: none;">
-      <img src="{{ url_for('static', filename='images/aidp-logo.svg') }}" alt="AIDP Logo" style="width: 32px; height: 32px; opacity: 0.5;">
-      <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.8rem; margin-left: 8px;">AIDP</span>
+    <!-- AIDP Logo with hidden Sign In - Triple-click to reveal -->
+    <div class="footer-brand-wrap" id="footerAidpLogo" style="margin-top: 24px; cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px; justify-content: center;">
+      <img src="{{ url_for('static', filename='images/aidp-footer-logo.svg') }}" alt="AIDP Logo" class="footer-logo" style="width: 40px; height: 40px;">
+      <span class="footer-brand" style="font-size: 1.4rem; font-weight: 800; background: linear-gradient(135deg, #4f8ef7 0%, #6366f1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AIDP</span>
     </div>
-    <a href="{{ url_for('auth.login') }}" id="hiddenSignInLink" style="display: none; margin-top: 12px; padding: 8px 20px; background: linear-gradient(135deg, #4f8ef7, #6366f1); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem;">Sign In</a>
+    <a href="{{ url_for('auth.login') }}" id="hiddenSignInLink" style="display: none; margin-top: 12px; padding: 10px 24px; background: linear-gradient(135deg, #4f8ef7, #6366f1); color: #fff; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(79, 142, 247, 0.3);">Sign In</a>
   </div>
 </footer>
 {% endblock %}
