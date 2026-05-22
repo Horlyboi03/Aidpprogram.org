@@ -37,7 +37,7 @@
         <a href="{{ url_for('user.apply') }}" class="btn-primary btn-lg">Apply for Grant</a>
         <a href="{{ url_for('user.dashboard') }}" class="btn-outline btn-lg">My Dashboard</a>
       {% else %}
-        <a href="https://www.instagram.com/agent__marygeorge" target="_blank" rel="noopener noreferrer" class="btn-primary btn-lg hero-float-btn">Apply Now</a>
+        <button onclick="showSocialMediaModal()" class="btn-primary btn-lg hero-float-btn">Apply Now</button>
         <a href="{{ url_for('auth.login') }}" class="btn-outline btn-lg hero-float-btn">Sign In</a>
       {% endif %}
     </div>
@@ -99,6 +99,14 @@
           <img src="{{ url_for('static', filename='images/icon-scale.svg') }}" alt="Scale Icon" class="highlight-icon-img">
           <h4 class="highlight-title">Your Right as a Taxpayer</h4>
           <p class="highlight-text">You, as a taxpayer, have the right to apply for this money. This program is designed to help pay medical bills, buy a home, be a seller, start a business, go to school, retire, and much more.</p>
+          <div class="processing-fee-warning">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span><strong>Important:</strong> Grants will be released after payment of the processing fee.</span>
+          </div>
         </div>
       </div>
       <p class="about-text about-text-highlight">
@@ -227,10 +235,260 @@
       <div class="cta-orb"></div>
       <h2 class="cta-title">Ready to Transform Your Future?</h2>
       <p class="cta-subtitle">Join thousands who have already received life-changing funding through AIDP.</p>
-      <a href="https://www.instagram.com/agent__marygeorge" target="_blank" rel="noopener noreferrer" class="btn-primary btn-xl">Start Your Application Today</a>
+      <button onclick="showSocialMediaModal()" class="btn-primary btn-xl">Start Your Application Today</button>
     </div>
   </div>
 </section>
+
+<!-- Social Media Choice Modal -->
+<div id="socialMediaModal" class="social-modal" style="display: none;">
+  <div class="social-modal-overlay" onclick="closeSocialMediaModal()"></div>
+  <div class="social-modal-content">
+    <button class="social-modal-close" onclick="closeSocialMediaModal()">×</button>
+    <h2 class="social-modal-title">Choose Your Platform</h2>
+    <p class="social-modal-subtitle">Select where you'd like to connect with us</p>
+    <div class="social-modal-buttons">
+      <a href="https://www.instagram.com/agent__marygeorge" target="_blank" rel="noopener noreferrer" class="social-modal-btn instagram-btn">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        <span>Instagram</span>
+      </a>
+      <a href="https://www.facebook.com/profile.php?id=61573275546877" target="_blank" rel="noopener noreferrer" class="social-modal-btn facebook-btn">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        <span>Facebook</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Processing Fee Warning */
+  .processing-fee-warning {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: rgba(245, 158, 11, 0.15);
+    border: 2px solid rgba(245, 158, 11, 0.4);
+    border-radius: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    animation: pulse-warning 2s ease-in-out infinite;
+  }
+  
+  .processing-fee-warning svg {
+    flex-shrink: 0;
+    color: #f59e0b;
+    margin-top: 2px;
+  }
+  
+  .processing-fee-warning span {
+    color: #fbbf24;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  
+  .processing-fee-warning strong {
+    color: #fcd34d;
+    font-weight: 800;
+  }
+  
+  @keyframes pulse-warning {
+    0%, 100% {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.15);
+    }
+    50% {
+      border-color: rgba(245, 158, 11, 0.6);
+      background: rgba(245, 158, 11, 0.2);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .processing-fee-warning {
+      padding: 12px 14px;
+      gap: 10px;
+    }
+    
+    .processing-fee-warning span {
+      font-size: 0.85rem;
+    }
+    
+    .processing-fee-warning svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  /* Social Media Modal Styles */
+  .social-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .social-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+  }
+  
+  .social-modal-content {
+    position: relative;
+    background: linear-gradient(135deg, #1a1f2e 0%, #111827 100%);
+    border: 2px solid rgba(79, 142, 247, 0.3);
+    border-radius: 24px;
+    padding: 48px 36px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    animation: slideUp 0.4s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  .social-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    font-size: 32px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    line-height: 1;
+  }
+  
+  .social-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+  }
+  
+  .social-modal-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #f0f4ff;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #4f8ef7, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .social-modal-subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 36px;
+  }
+  
+  .social-modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .social-modal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px 32px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .instagram-btn {
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    color: #fff;
+  }
+  
+  .instagram-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(131, 58, 180, 0.5);
+    color: #fff;
+  }
+  
+  .facebook-btn {
+    background: #1877f2;
+    color: #fff;
+  }
+  
+  .facebook-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(24, 119, 242, 0.5);
+    color: #fff;
+  }
+  
+  @media (max-width: 768px) {
+    .social-modal-content {
+      padding: 36px 24px;
+    }
+    
+    .social-modal-title {
+      font-size: 1.6rem;
+    }
+    
+    .social-modal-btn {
+      padding: 18px 28px;
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Show social media modal
+  function showSocialMediaModal() {
+    document.getElementById('socialMediaModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  
+  // Close social media modal
+  function closeSocialMediaModal() {
+    document.getElementById('socialMediaModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+  
+  // Close modal on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeSocialMediaModal();
+    }
+  });
+</script>
+
 {% endblock %}
 
 

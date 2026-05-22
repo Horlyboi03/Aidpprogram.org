@@ -405,7 +405,7 @@
           </li>
         {% else %}
           <li><a href="{{ url_for('user.home') }}" class="nav-link">Home</a></li>
-          <li><a href="{{ url_for('auth.login') }}" class="nav-link">Login</a></li>
+          <li><a href="{{ url_for('auth.login') }}" class="nav-link" style="display: none;">Login</a></li>
           <li><a href="{{ url_for('auth.register') }}" class="nav-link btn-nav-cta">Get Started</a></li>
         {% endif %}
       </ul>
