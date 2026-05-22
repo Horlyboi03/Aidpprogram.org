@@ -12,13 +12,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
 
   <!-- Main stylesheet -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260522002" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20260522003" />
   
   <!-- Premium Admin Dashboard -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260522002" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin-premium.css') }}?v=20260522003" />
   
   <!-- Comprehensive Responsive Fixes -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260522002" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-fixes.css') }}?v=20260522003" />
   
   <!-- Force cache clear with timestamp -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -77,20 +77,84 @@
         opacity: 1 !important;
       }
       
-      /* Document images - Make visible */
+      /* Document images - Make visible and properly sized */
       .document-image,
       .document-image-clickable {
         max-width: 100% !important;
+        width: 100% !important;
         height: auto !important;
         display: block !important;
         visibility: visible !important;
+        opacity: 1 !important;
         border-radius: 12px !important;
+        margin: 10px 0 !important;
       }
       
       .document-preview-container {
         display: block !important;
         visibility: visible !important;
+        opacity: 1 !important;
         margin-bottom: 20px !important;
+        width: 100% !important;
+      }
+      
+      .premium-detail-card {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      
+      /* Chat Layout - Mobile Responsive */
+      .admin-chat-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+      }
+      
+      .admin-users-sidebar {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        width: 100% !important;
+      }
+      
+      .admin-chat-layout.conversation-active .admin-users-sidebar {
+        display: none !important;
+      }
+      
+      .chat-window {
+        display: none !important;
+        flex-direction: column !important;
+        height: 100vh !important;
+        width: 100% !important;
+      }
+      
+      .admin-chat-layout.conversation-active .chat-window {
+        display: flex !important;
+      }
+      
+      .chat-topbar {
+        flex-shrink: 0 !important;
+        height: 60px !important;
+        min-height: 60px !important;
+      }
+      
+      .chat-messages {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        min-height: 0 !important;
+        padding: 16px !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      
+      .chat-input-bar {
+        flex-shrink: 0 !important;
+        min-height: 64px !important;
+        padding: 12px 16px !important;
+        position: relative !important;
+        z-index: 10 !important;
       }
       
       /* Hamburger Menu - Visible and Clickable */
